@@ -8,10 +8,13 @@ import cookieParser from "cookie-parser"
 dotenv.config()
 
 import authRoutes from './routes/auth'
+import postRoutes from './routes/posts'
+import subsRoutes from './routes/subs'
 
 import trim from "./middleware/trim"
 
 const app = express()
+const PORT = process.env.PORT
 
 app.use(express.json())
 app.use(morgan('dev'))
@@ -20,10 +23,12 @@ app.use(cookieParser())
 
 app.get('/', (req, res) => res.send("Floppa send their regards"))
 app.use("/api/auth", authRoutes)
+app.use("/api/posts", postRoutes)
+app.use("/api/subs", subsRoutes)
 
 
-app.listen(process.env.PORT, async () => {
-    console.log("Server running on port 5000");
+app.listen(PORT, async () => {
+    console.log(`Server running on port ${PORT}`);
     try{    
         await createConnection()
         console.log('db connected');
