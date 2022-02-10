@@ -1,20 +1,13 @@
-import {
-    BeforeInsert,
-    Column,
-    Entity as TOEntity,
-    Index,
-    JoinColumn,
-    ManyToOne,
-  } from 'typeorm'
+import { BeforeInsert, Column, Entity as TOEntity, Index, JoinColumn, ManyToOne} from 'typeorm'
   
-  import Entity from './Enitity'
-  import Post from './Post'
-  import User from './User'
+import Entity from './Enitity'
+import Post from './Post'
+import User from './User'
   
-  import { makeId } from '../utils/helpers'
+import { makeId } from '../utils/helpers'
   
-  @TOEntity('comments')
-  export default class Comment extends Entity {
+@TOEntity('comments')
+    export default class Comment extends Entity {
     constructor(comment: Partial<Comment>) {
       super()
       Object.assign(this, comment)
@@ -41,4 +34,4 @@ import {
     makeIdAndSlug() {
       this.identifier = makeId(8)
     }
-  }
+}
