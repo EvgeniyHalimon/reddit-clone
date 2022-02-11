@@ -4,10 +4,10 @@ import Image from 'next/image';
 
 const Navbar: React.FC = () => {
     return(
-        <div className="fixed inset-x-0 top-0 z-10 flex items-center justify-between h-20 px-5 bg-white">
+        <div className="fixed inset-x-0 top-0 z-10 flex items-center justify-between h-16 px-5 bg-white">
             <div className="flex items-center">
                 <Link href="/">
-                    <a className="mr-1">
+                    <a className="mr-2">
                     <Image src={Logo} width={50} height={50} className="mr-10 rounded-3xl"/>
                     </a>
                 </Link>

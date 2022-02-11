@@ -7,6 +7,7 @@ import auth from '../middleware/auth'
 
 const createPost = async (req: Request, res: Response) => {
   const { title, body, sub } = req.body
+  console.log("🚀 ~ file: posts.ts ~ line 10 ~ createPost ~ title", title)
 
   const user = res.locals.user
 

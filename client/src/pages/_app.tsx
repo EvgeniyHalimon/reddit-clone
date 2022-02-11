@@ -14,7 +14,7 @@ function App({ Component, pageProps }: AppProps) {
   const authRoute = authroutes.includes(pathname)
   return( 
     <Fragment>
-      {!authroutes && <Navbar/>}
+      {!authRoute && <Navbar/>}
       <Component {...pageProps} />
     </Fragment>
   )
