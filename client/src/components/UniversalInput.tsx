@@ -9,7 +9,7 @@ interface InputGroupProps {
     setValue: (str: string) => void
 }
 
-const InputGroup: React.FC<InputGroupProps> = ({
+const UniversalInput: React.FC<InputGroupProps> = ({
     className,
     type,
     placeholder,
@@ -34,4 +34,4 @@ const InputGroup: React.FC<InputGroupProps> = ({
     )
 }
 
-export default InputGroup
+export default UniversalInput

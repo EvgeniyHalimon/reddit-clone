@@ -3,8 +3,11 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Axios from 'axios'
 import { useRouter } from 'next/router'
+import UniversalInput from '../components/UniversalInput'
 
-import InputGroup from '../components/InputGroup'
+
+console.log(process.env.BASE_URL);
+
 
 export default function Register() {
     const [email, setEmail] = useState('')
@@ -12,25 +15,18 @@ export default function Register() {
     const [password, setPassword] = useState('')
     const [agreement, setAgreement] = useState(false)
     const [errors, setErrors] = useState<any>({})
-
     const router = useRouter()
 
     const submitForm = async (event: FormEvent) => {
         event.preventDefault()
 
-        if (!agreement) {
-            setErrors({ ...errors, agreement: 'You must agree to T&Cs' })
-            return
-        }
-
         try {
-            await Axios.post('/auth/register', {
-            email,
+            await Axios.post('/auth/login', {
             password,
             username,
         })
 
-            router.push('/login')
+            router.push('/')
         } catch (err) {
             setErrors(err.response.data)
         }
@@ -42,8 +38,8 @@ return (
             <title>Register</title>
         </Head>
         <div
-            className="h-screen bg-center bg-cover w-36"
-            style={{ backgroundImage: "url('/images/bricks.jpg')" }}
+            className="h-screen bg-left-bottom bg-cover w-36"
+            style={{ backgroundImage: "url('/images/floppa.png')" }}
         ></div>
         <div className="flex flex-col justify-center pl-6">
             <div className="w-70">
@@ -61,13 +57,13 @@ return (
                             onChange={(e) => setAgreement(e.target.checked)}
                         />
                         <label htmlFor="agreement" className="text-xs cursor-pointer">
-                            I agree to get emails about cool stuff on Readit
+                            I agree to get emails about cool stuff on Floppedit
                         </label>
                         <small className="block font-medium text-red-600">
                             {errors.agreement}
                         </small>
                     </div>
-                    <InputGroup
+                    <UniversalInput
                         className="mb-2"
                         type="email"
                         value={email}
@@ -75,7 +71,7 @@ return (
                         placeholder="EMAIL"
                         error={errors.email}
                     />
-                    <InputGroup
+                    <UniversalInput
                         className="mb-2"
                         type="text"
                         value={username}
@@ -83,7 +79,7 @@ return (
                         placeholder="USERNAME"
                         error={errors.username}
                     />
-                    <InputGroup
+                    <UniversalInput
                         className="mb-4"
                         type="password"
                         value={password}
@@ -96,7 +92,7 @@ return (
                     </button>
                 </form>
                 <small>
-                    Already a readitor?
+                    Already a floppeditor?
                     <Link href="/login">
                         <a className="ml-1 text-blue-500 uppercase">Log In</a>
                     </Link>
