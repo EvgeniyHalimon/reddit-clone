@@ -11,6 +11,7 @@ import { Exclude } from 'class-transformer'
 
 import Entity from './Enitity'
 import Post from './Post'
+import Vote from './Vote'
 
 @TOEntity('users')
 export default class User extends Entity {
@@ -20,7 +21,7 @@ export default class User extends Entity {
   }
 
   @Index()
-  @IsEmail(undefined, {message: "Must be a valid email address"})
+  @IsEmail(undefined, { message: 'Must be a valid email address' })
   @Length(1, 255, { message: 'Email is empty' })
   @Column({ unique: true })
   email: string
@@ -32,11 +33,14 @@ export default class User extends Entity {
 
   @Exclude()
   @Column()
-  @Length(6, 255, {message: 'Must be at 6 characters long'})
+  @Length(6, 255, { message: 'Must be at least 6 characters long' })
   password: string
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[]
+
+  @OneToMany(() => Vote, (vote) => vote.user)
+  votes: Vote[]
 
   @BeforeInsert()
   async hashPassword() {
