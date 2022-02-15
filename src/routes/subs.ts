@@ -8,8 +8,7 @@ import auth from '../middleware/auth'
 
 const createSub = async (req: Request, res: Response) => {
   const { name, title, description } = req.body
-  console.log(name, title, description, "+++++++++++++++++");
-  
+  console.log("🚀 ~ file: subs.ts ~ line 11 ~ createSub ~ req.body", req.body)
 
   const user: User = res.locals.user
 
