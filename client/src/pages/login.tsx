@@ -4,24 +4,30 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { FormEvent, useState } from 'react'
 import UniversalInput from "../components/UniversalInput"
+import { useAuthDispatch, useAuthState } from "../context/auth"
+
 
 const Login = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [errors, setErrors] = useState<any>({})
+
+    const dispatch = useAuthDispatch()
+    const {authenticated} = useAuthState()
+
     const router = useRouter()
+    if(authenticated) router.push("/")
 
     const submitForm = async (event: FormEvent) => {
         event.preventDefault()
 
         try {
-            await Axios.post('/auth/login', 
-            {
+            const res = await Axios.post('/auth/login',{
                 password,
                 username,
-            },
-            {withCredentials: true}
-        )
+            })
+
+            dispatch({type: 'LOGIN', payload: res.data})
 
             router.push('/')
         } catch (err) {

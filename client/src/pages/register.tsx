@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Axios from 'axios'
 import { useRouter } from 'next/router'
 import UniversalInput from '../components/UniversalInput'
+import { useAuthState } from '../context/auth'
 
 
 console.log(process.env.BASE_URL);
@@ -16,6 +17,10 @@ export default function Register() {
     const [agreement, setAgreement] = useState(false)
     const [errors, setErrors] = useState<any>({})
     const router = useRouter()
+
+    const {authenticated} = useAuthState()
+
+    if(authenticated) router.push("/")
 
     const submitForm = async (event: FormEvent) => {
         event.preventDefault()

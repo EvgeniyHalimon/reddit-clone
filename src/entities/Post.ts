@@ -70,13 +70,9 @@ export default class Post extends Entity {
   }
 
   @Expose() get voteScore(): number {
-    console.log(this.votes, 'this.votes');
-    
     let accum = this.votes?.reduce((prev, curr) => {
       return prev + (Number(curr.value) || 0)
     }, 0)
-    console.log(accum, 'ACCUM');
-    
     return accum
   }
 

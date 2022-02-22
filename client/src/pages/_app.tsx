@@ -2,9 +2,8 @@ import '../styles/Tailwind.css'
 import  { AppProps } from 'next/app'
 import Axios from 'axios'
 import Navbar from "../components/Navbar"
-import { Fragment } from 'react'
 import { useRouter } from 'next/router';
-
+import { AuthProvider } from '../context/auth'
 import "../styles/icons.css"
 
 Axios.defaults.baseURL = 'http://localhost:5000/api'
@@ -15,10 +14,10 @@ function App({ Component, pageProps }: AppProps) {
   const authroutes = ["/register" ,"/login"]
   const authRoute = authroutes.includes(pathname)
   return( 
-    <Fragment>
+    <AuthProvider>
       {!authRoute && <Navbar/>}
       <Component {...pageProps} />
-    </Fragment>
+    </AuthProvider>
   )
 }
 
