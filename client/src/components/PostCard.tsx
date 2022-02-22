@@ -1,5 +1,4 @@
 import Link from "next/link"
-import { Fragment } from 'react';
 import { Post } from "../types";
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -56,12 +55,12 @@ const PostCard: React.FC<IPostCard> = ({ post }) => {
             <div className="w-full p-2">
                 <div className="flex items-center">
                     <Link href={`/r/${post.subName}`}>
-                        <Fragment>
-                            <img className="w-6 h-6 mr-1 rounded-full cursor-pointer" src="https://play-lh.googleusercontent.com/70v2P2iEq51cg0j6oYMDjVOPOPCGfuYeqJDEn4n27W9BRm-xW-9Pb96k-0Q3c8qPhKUB" alt="subpic"/>
-                            <a className="text-xs font-bold cursor-pointer hover:underline">
-                                /r/{post.subName}
-                            </a>
-                        </Fragment>
+                        <img className="w-6 h-6 mr-1 rounded-full cursor-pointer" src="https://play-lh.googleusercontent.com/70v2P2iEq51cg0j6oYMDjVOPOPCGfuYeqJDEn4n27W9BRm-xW-9Pb96k-0Q3c8qPhKUB" alt="subpic"/>
+                    </Link>
+                    <Link href={`/r/${post.subName}`}>
+                        <a className="text-xs font-bold cursor-pointer hover:underline">
+                            /r/{post.subName}
+                        </a>
                     </Link>
                     <p className="text-xs text-gray-600">
                         <span className="mx-1">&#8226;</span>
