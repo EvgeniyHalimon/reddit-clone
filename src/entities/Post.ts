@@ -53,6 +53,7 @@ export default class Post extends Entity {
   @JoinColumn({ name: 'subName', referencedColumnName: 'name' })
   sub: Sub
 
+  @Exclude()
   @OneToMany(() => Comment, comment => comment.post)
   comments: Comment[]
 
@@ -65,19 +66,16 @@ export default class Post extends Entity {
   }
 
   @Expose() get commentCount(): number {
-    console.log(this.comments);
-    
     return this.comments?.length
   }
 
   @Expose() get voteScore(): number {
+    console.log(this.votes, 'this.votes');
+    
     let accum = this.votes?.reduce((prev, curr) => {
-      console.log(prev, "prev", typeof prev);
-      console.log(curr.value, "curr",typeof curr.value);
-      
       return prev + (Number(curr.value) || 0)
     }, 0)
-    console.log(accum, "-345304503405=====");
+    console.log(accum, 'ACCUM');
     
     return accum
   }

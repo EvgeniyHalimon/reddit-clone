@@ -8,4 +8,7 @@ export interface Post {
     createdAt: string
     updatedAt: string
     url: string
+    voteScore?: number
+    commentCount?: number
+    userVote?: number
 }
