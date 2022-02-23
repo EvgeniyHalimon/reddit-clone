@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import PostCard from '../components/PostCard';
 import useSWR from 'swr'
+import { Fragment } from 'react';
 
 dayjs.extend(relativeTime)
 
@@ -12,7 +13,7 @@ export default function Home() {
   const { data: posts } = useSWR('/posts')
 
   return (
-    <div className="pt-20">
+    <Fragment>
       <Head>
         <title>Floppa sanctuary</title>
       </Head>
@@ -23,7 +24,7 @@ export default function Home() {
           ))}
         </div>
       </div>
-    </div>
+    </Fragment>
   )
 }
 

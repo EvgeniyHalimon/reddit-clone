@@ -51,6 +51,7 @@ const getSub = async(req: Request, res: Response) => {
     const sub = await Sub.findOneOrFail({name})
     const posts  = await Post.find({
       where: {sub},
+      order: {createdAt: 'DESC'},
       relations: ['comments', 'votes']
     })
 
@@ -63,7 +64,7 @@ const getSub = async(req: Request, res: Response) => {
     return res.json(sub)
   } catch (error) {
     console.log(error);
-    return res.status(500).json({error: 'something went wrong'})
+    return res.status(404).json({sub: 'Sub not found'})
   }
 }
 
