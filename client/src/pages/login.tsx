@@ -27,9 +27,9 @@ const Login = () => {
                 username,
             })
 
-            dispatch({type: 'LOGIN', payload: res.data})
+            dispatch('LOGIN', res.data)
 
-            router.push('/')
+            router.back()
         } catch (err) {
             setErrors(err.response.data)
         }
