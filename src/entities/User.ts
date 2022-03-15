@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm'
 import bcrypt from 'bcrypt'
-import { Exclude } from 'class-transformer'
+import { Exclude, Expose } from 'class-transformer'
 
 import Entity from './Enitity'
 import Post from './Post'
@@ -36,6 +36,9 @@ export default class User extends Entity {
   @Length(6, 255, { message: 'Must be at least 6 characters long' })
   password: string
 
+  @Column({ nullable: true })
+  userAvatar: string
+
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[]
 
@@ -45,5 +48,12 @@ export default class User extends Entity {
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 6)
+  }
+
+  @Expose()
+  get avatarUrl(): string {
+    return this.userAvatar
+      ? `${process.env.APP_URL}/images/${this.userAvatar}`
+      : 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'
   }
 }

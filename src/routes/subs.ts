@@ -97,7 +97,7 @@ const upload = multer({
     },
   }),
   fileFilter: (_, file: any, callback: FileFilterCallback) => {
-    if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png') {
+    if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png' || file.mimetype == 'image/jpg') {
       callback(null, true)
     } else {
       callback(new Error('Not an image'))

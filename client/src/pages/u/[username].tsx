@@ -1,19 +1,47 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import Axios from "axios";
 import dayjs from "dayjs";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { ChangeEvent, createRef } from "react";
 import useSWR from "swr";
 import PostCard from "../../components/PostCard";
-import { Comment, Post } from "../../types";
+import { Comment, Post, User } from "../../types";
+import Image from "next/image";
 
 export default function user() {
     const router = useRouter()
     const username = router.query.username
 
-    const {data, error} = useSWR<any>(username ? `/users/${username}` : null)
+    const fileInputRef = createRef<HTMLInputElement>()
+    
+    const openFileInput = (type: string) => {
+        fileInputRef.current.name = type
+        fileInputRef.current.click()
+    }
+    
+    const uploadImage = async (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files[0]
+    
+        const formData = new FormData()
+        formData.append('file', file) 
+        formData.append('type', fileInputRef.current.name)
+    
+        try {
+          await Axios.post<User>(`users/${username}/image`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          })
+    
+          revalidate()
+        } catch (err) {
+          console.log(err)
+        }
+      }
+
+    const {data, error, revalidate} = useSWR<any>(username ? `/users/${username}` : null)
     if(error) return router.push('/')
-    if(data) console.log(data);
+    if(data) console.log(data)
     
     return(
         <>
@@ -21,7 +49,7 @@ export default function user() {
                 <title>{data?.user.username}</title>
             </Head>
             {data && (
-                <div className="container flex pt-5">
+                <div className="container flex pt-5 px-5">
                     <div className="w-160">
                         {data.submissions.map((submission: any) => {
                             if(submission.type === "Post"){
@@ -67,24 +95,33 @@ export default function user() {
                         })}
                     </div>
                     <div className="w-80 ml-6">
-                    <div className="ml-6 w-80">
-            <div className="bg-white rounded">
-              <div className="p-3 bg-blue-500 rounded-t">
-                <img
-                  src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
-                  alt="user profile"
-                  className="w-16 h-16 mx-auto border-2 border-white rounded-full"
-                />
-              </div>
-              <div className="p-3 text-center">
-                <h1 className="mb-3 text-xl">{data.user.username}</h1>
-                <hr />
-                <p className="mt-3">
-                  Joined {dayjs(data.user.createdAt).format('MMM YYYY')}
-                </p>
-              </div>
-            </div>
-          </div>
+                    <input
+                        type="file"
+                        hidden={true}
+                        ref={fileInputRef}
+                        onChange={uploadImage}
+                    />
+                        <div className="ml-6 w-80">
+                            <div className="bg-white rounded">
+                            <div className="p-3 bg-blue-500 rounded-t text-center">
+                                <Image
+                                    src={data.user.avatarUrl}
+                                    alt="user profile"
+                                    className='w-16 h-16 mx-0 border-2 border-white rounded-full cursor-pointer'
+                                    onClick={() => openFileInput('image')}
+                                    width={70}
+                                    height={70}
+                                />
+                            </div>
+                            <div className="p-3 text-center">
+                                <h1 className="mb-3 text-xl">{data.user.username}</h1>
+                                <hr />
+                                <p className="mt-3">
+                                    Joined {dayjs(data.user.createdAt).format('MMM YYYY')}
+                                </p>
+                            </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}

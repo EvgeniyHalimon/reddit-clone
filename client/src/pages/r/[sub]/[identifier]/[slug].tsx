@@ -115,7 +115,7 @@ export default function PostPage() {
           </div>
         </a>
       </Link>
-      <div className="container flex pt-5">
+      <div className="container flex pt-5 px-5">
         {/* Post */}
         <div className="w-160">
           <div className="bg-white rounded">

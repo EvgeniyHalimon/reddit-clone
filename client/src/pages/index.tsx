@@ -33,6 +33,16 @@ export default function Home() {
 
   const isInitialLoading = !data && !error
   const posts: Post[] = data ? [].concat(...data) : []
+  posts.sort((a,b) => {
+    if (a.voteScore < b.voteScore) {
+      return 1;
+    }
+    if (a.voteScore > b.voteScore) {
+      return -1;
+    }
+    
+    return 0;
+  })
 
   useEffect(() => {
     if(!posts || posts.length === 0) return
@@ -78,7 +88,7 @@ export default function Home() {
             <p className='text-lg text-center'>Loading more..</p>
           )}
         </div>
-        <div className="ml-6 w-80">
+        <div className="ml-6 w-80 px-4">
           <div className="rounded bg-white">
             <div className="p-4 border-b-2">
               <p className="text-lg font-semibold text-center">

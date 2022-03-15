@@ -71,7 +71,7 @@ return (
                 <small>
                     New to Floppedit?
                     <Link href="/login">
-                        <a className="ml-1 text-blue-500 uppercase">Log In</a>
+                        <a className="ml-1 text-blue-500 uppercase">Sign Up</a>
                     </Link>
                 </small>
             </div>

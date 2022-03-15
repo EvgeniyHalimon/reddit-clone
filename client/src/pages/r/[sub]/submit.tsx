@@ -37,7 +37,7 @@ export default function submit() {
   }
 
   return (
-    <div className="container flex pt-5">
+    <div className="container flex pt-5 px-5">
       <Head>
         <title>Submit to Readit</title>
       </Head>

@@ -31,6 +31,18 @@ export default function SubPage() {
     setOwnSub(authenticated && user.username === sub.username)
   }, [sub])
 
+  sub?.posts?.sort((a,b) => {
+    if (a.voteScore < b.voteScore) {
+      return 1;
+    }
+    if (a.voteScore > b.voteScore) {
+      return -1;
+    }
+    
+    return 0;
+  })
+
+
   const openFileInput = (type: string) => {
     if (!ownSub) return
     fileInputRef.current.name = type
@@ -98,7 +110,7 @@ export default function SubPage() {
                     backgroundImage: `url(${sub.bannerUrl})`,
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
-                    backgroundPosition: 'center',
+                    backgroundPosition: 'top',
                   }}
                 ></div>
               ) : (
@@ -132,7 +144,7 @@ export default function SubPage() {
             </div>
           </div>
           {/* Posts & Sidebar */}
-          <div className="container flex pt-5">
+          <div className="container flex pt-5 px-5">
             <div className="w-160">{postsMarkup}</div>
             <Sidebar sub={sub}/>
           </div>

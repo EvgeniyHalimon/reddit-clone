@@ -28,7 +28,7 @@ export default function create() {
                             <div className="text-xs text-gray-500">
                                 Community names including capitalization cannot be changed
                             </div>
-                            <input type="text" className="border border-gray-200 rounded p-3" />
+                            <input type="text" className="border border-gray-200 w-full rounded p-3" />
                         </div>
                     </form>
                 </h1>
