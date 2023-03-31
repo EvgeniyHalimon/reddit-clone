@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import { FormEvent, useState } from 'react'
 import UniversalInput from "../components/UniversalInput"
 import { useAuthDispatch, useAuthState } from "../context/auth"
+import { log } from "console"
 
 
 const Login = () => {
@@ -26,7 +27,7 @@ const Login = () => {
                 password,
                 username,
             })
-
+            console.log(res.data)
             dispatch({type: 'LOGIN', payload: res.data})
 
             router.push('/')

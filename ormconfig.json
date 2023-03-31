@@ -3,7 +3,7 @@
    "host": "localhost",
    "port": 5432,
    "username": "postgres",
-   "password": "qwerty",
+   "password": "hori",
    "database": "reddit",
    "synchronize": false,
    "logging": true,
