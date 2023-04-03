@@ -6,11 +6,12 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import PostCard from '../components/PostCard';
 import useSWR from 'swr'
 import { Fragment } from 'react';
+import { GetServerSideProps } from 'next';
 
 dayjs.extend(relativeTime)
 
-export default function Home() {
-  const { data: posts } = useSWR('/posts')
+export default function Home({ posts }) {
+  /* const { data: posts } = useSWR('/posts') */
 
   return (
     <Fragment>
@@ -29,12 +30,11 @@ export default function Home() {
 }
 
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   try {
-//     const res = await Axios.get('/posts')
-
-//     return { props: { posts: res.data } }
-//   } catch (err) {
-//     return { props: { error: 'Something went wrong' } }
-//   }
-// }
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  try {
+    const res = await Axios.get('/posts')
+    return { props: { posts: res.data } }
+  } catch (err) {
+    return { props: { error: 'Something went wrong' } }
+  }
+}

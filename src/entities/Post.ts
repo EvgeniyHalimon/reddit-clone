@@ -10,7 +10,7 @@ import {
 } from 'typeorm'
 import { Exclude, Expose } from 'class-transformer'
 
-import Entity from './Enitity'
+import Entity from './Entity'
 import User from './User'
 import { makeId, slugify } from '../utils/helpers'
 import Sub from './Sub'

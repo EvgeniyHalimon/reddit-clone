@@ -5,9 +5,8 @@ import { useRouter } from "next/router"
 import { FormEvent, useState } from 'react'
 import UniversalInput from "../components/UniversalInput"
 import { useAuthDispatch, useAuthState } from "../context/auth"
-import { log } from "console"
 
-
+//!TODO: refactor form
 const Login = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -15,22 +14,22 @@ const Login = () => {
 
     const dispatch = useAuthDispatch()
     const {authenticated} = useAuthState()
-
+    
     const router = useRouter()
     if(authenticated) router.push("/")
-
+    
     const submitForm = async (event: FormEvent) => {
         event.preventDefault()
-
+        
         try {
             const res = await Axios.post('/auth/login',{
                 password,
                 username,
             })
-            console.log(res.data)
-            dispatch({type: 'LOGIN', payload: res.data})
+            dispatch('LOGIN',res.data)
+            console.log("🚀 ~ file: login.tsx:17 ~ Login ~ authenticated:", authenticated)
 
-            router.push('/')
+            router.back()
         } catch (err) {
             setErrors(err.response.data)
         }

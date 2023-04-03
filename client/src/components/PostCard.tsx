@@ -14,7 +14,7 @@ interface IPostCard{
 
 const PostCard: React.FC<IPostCard> = ({ post }) => {
 
-    const vote =  async (value) => {
+    const vote = async (value) => {
         try {
             const res = await Axios.post('/misc/vote', {
                 identifier : post.identifier,

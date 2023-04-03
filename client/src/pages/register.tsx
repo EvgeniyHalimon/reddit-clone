@@ -9,7 +9,7 @@ import { useAuthState } from '../context/auth'
 
 console.log(process.env.BASE_URL);
 
-
+//!TODO: refactor form
 export default function Register() {
     const [email, setEmail] = useState('')
     const [username, setUsername] = useState('')

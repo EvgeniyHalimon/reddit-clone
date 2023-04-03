@@ -6,6 +6,7 @@ import Axios from 'axios';
 
 const Navbar: React.FC = () => {
     const { authenticated, loading } = useAuthState()
+    console.log("🚀 ~ file: Navbar.tsx:9 ~ authenticated:", !loading, authenticated)
 
     const dispatch = useAuthDispatch()
 
@@ -23,7 +24,7 @@ const Navbar: React.FC = () => {
             <div className="flex items-center">
                 <Link href="/">
                     <a className="mr-2">
-                    <Image src={Logo} width={50} height={50} className="mr-10 rounded-3xl"/>
+                    <Image src={Logo} width={50} height={50} alt='logo' className="mr-10 rounded-3xl"/>
                     </a>
                 </Link>
                 <span className="text-2x1 font-semiblod">
