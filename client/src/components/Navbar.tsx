@@ -62,11 +62,11 @@ const Navbar: React.FC = () => {
       <div className="flex items-center">
             <Link href="/">
                 <a className="mr-2">
-                <Image src={Logo} width={50} height={50} alt='logo' className="mr-10 rounded-3xl"/>
+                    <Image src={Logo} width={50} height={50} alt='logo' className="mr-10 rounded-3xl"/>
                 </a>
             </Link>
         <span className="hidden text-2xl font-semibold lg:block">
-          <Link href="/">readit</Link>
+          <Link href="/">Floppedit</Link>
         </span>
       </div>
       {/* Search Input */}
