@@ -7,20 +7,22 @@ export interface Post {
     username: string
     createdAt: string
     updatedAt: string
+    sub?: Sub
+    // Virtual fields
     url: string
     voteScore?: number
     commentCount?: number
     userVote?: number
-}
-
-export interface User{
+  }
+  
+  export interface User {
     username: string
     email: string
     createdAt: string
     updatedAt: string
-}
-
-export interface Sub {
+  }
+  
+  export interface Sub {
     createdAt: string
     updatedAt: string
     name: string
@@ -33,4 +35,17 @@ export interface Sub {
     // Virtuals
     imageUrl: string
     bannerUrl: string
+    postCount?: number
+  }
+  
+  export interface Comment {
+    identifier: string
+    body: string
+    username: string
+    createdAt: string
+    updatedAt: string
+    post?: Post
+    // Virtuals
+    userVote: number
+    voteScore: number
   }
