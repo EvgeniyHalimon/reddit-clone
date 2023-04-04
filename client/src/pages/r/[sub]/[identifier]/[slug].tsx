@@ -1,106 +1,112 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { FormEvent, useState } from 'react'
 import useSWR from 'swr'
-import { Post, Comment } from '../../../../types'
 import Image from 'next/image'
-import Sidebar from '../../../../components/Sidebar'
-import { useAuthState } from '../../../../context/auth'
 import dayjs from 'dayjs'
-import Axios from 'axios'
-import ActionButton from '../../../../components/ActionButton'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import classNames from 'classnames'
-import relativeTime from 'dayjs/plugin/relativeTime';
+
+import { Post, Comment } from '../../../../types'
+import Sidebar from '../../../../components/Sidebar'
+import Axios from 'axios'
+import { useAuthState } from '../../../../context/auth'
+import ActionButton from '../../../../components/ActionButton'
+import { FormEvent, useState } from 'react'
 
 dayjs.extend(relativeTime)
 
 const PostPage = () => {
-    const [newComment, setNewComment] = useState('')
-    const { authenticated, user } = useAuthState()
-    const router = useRouter()
-    const { identifier, sub, slug } = router.query
+  // Local state
+  const [newComment, setNewComment] = useState('')
+  // Global state
+  const { authenticated, user } = useAuthState()
 
-    const { data : post, error } = useSWR<Post>((identifier && slug) ? `/posts/${identifier}/${slug}` : null)
+  // Utils
+  const router = useRouter()
+  const { identifier, sub, slug } = router.query
 
-    const { data: comments, mutate } = useSWR<Comment[]>(
-        identifier && slug ? `/posts/${identifier}/${slug}/comments` : null
+  const { data: post, error } = useSWR<Post>(
+    identifier && slug ? `/posts/${identifier}/${slug}` : null
+  )
+
+  const { data: comments, mutate } = useSWR<Comment[]>(
+    identifier && slug ? `/posts/${identifier}/${slug}/comments` : null
+  )
+
+  if (error) router.push('/')
+
+  const vote = async (value: number, comment?: Comment) => {
+    // If not logged in go to login
+    if (!authenticated) router.push('/login')
+
+    // If vote is the same reset vote
+    if (
+      (!comment && value === post.userVote) ||
+      (comment && comment.userVote === value)
     )
+      value = 0
 
-    if(error) router.push('/')
+    try {
+      await Axios.post('/misc/vote', {
+        identifier,
+        slug,
+        commentIdentifier: comment?.identifier,
+        value,
+      })
 
-    const vote = async (value: number, comment?: Comment) => {
-        // If not logged in go to login
-        if (!authenticated) router.push('/login')
-    
-        // If vote is the same reset vote
-        if (
-          (!comment && value === post.userVote) ||
-          (comment && comment.userVote === value)
-        )
-          value = 0
-    
-        try {
-          await Axios.post('/misc/vote', {
-            identifier,
-            slug,
-            commentIdentifier: comment?.identifier,
-            value,
-          })
-    
-          mutate()
-        } catch (err) {
-          console.log(err)
-        }
-      }
-    
-      const submitComment = async (event: FormEvent) => {
-        event.preventDefault()
-        if (newComment.trim() === '') return
-    
-        try {
-          await Axios.post(`/posts/${post.identifier}/${post.slug}/comments`, {
-            body: newComment,
-          })
-    
-          setNewComment('')
-    
-          mutate()
-        } catch (err) {
-          console.log(err)
-        }
-      }
+      mutate()
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
-    return (
-        <>
-        <Head>
-            <title>
-                {post?.title}
-            </title>
-        </Head>
-        <Link href={`/r/${sub}`}>
-            <a>
-                <div className="flex items-center w-full h-20 p-8 bg-blue-500">
-                    <div className="container flex">
-                        {post && (
-                            <div className='w-8 h-8 mr-2 overflow-hidden rounded-full'>
-                                <Image
-                                    src={post.sub.imageUrl}
-                                    alt={post.subName}
-                                    width={8*16/2}
-                                    height={8*16/2}
-                                />
-                            </div>
-                        )}
-                        <p className='text-xl font-semibold text-white'>/r/{sub}</p>
-                    </div>
+  const submitComment = async (event: FormEvent) => {
+    event.preventDefault()
+    if (newComment.trim() === '') return
+
+    try {
+      await Axios.post(`/posts/${post.identifier}/${post.slug}/comments`, {
+        body: newComment,
+      })
+
+      setNewComment('')
+
+      mutate()
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  return (
+    <>
+      <Head>
+        <title>{post?.title}</title>
+      </Head>
+      <Link href={`/r/${sub}`}>
+        <a>
+          <div className="flex items-center w-full h-20 p-8 bg-blue-500">
+            <div className="container flex">
+              {post && (
+                <div className="w-8 h-8 mr-2 overflow-hidden rounded-full">
+                  <Image
+                    src={post.sub.imageUrl}
+                    height={(8 * 16) / 4}
+                    width={(8 * 16) / 4}
+                    alt='sub-image'
+                  />
                 </div>
-            </a>
-        </Link>
-        <div className="container flex pt-5">
-            <div className='w-160'>
-                <div className="bg-white rounded">
-                {post && (
+              )}
+              <p className="text-xl font-semibold text-white">/r/{sub}</p>
+            </div>
+          </div>
+        </a>
+      </Link>
+      <div className="container flex pt-5">
+        {/* Post */}
+        <div className="w-160">
+          <div className="bg-white rounded">
+            {post && (
               <>
                 <div className="flex">
                   {/* Vote section */}
@@ -110,11 +116,7 @@ const PostPage = () => {
                       className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
                       onClick={() => vote(1)}
                     >
-                      <i
-                        className={classNames('icon-arrow-up', {
-                          'text-red-500': post.userVote === 1,
-                        })}
-                      ></i>
+                      <i className={`icon-arrow-up ${post.userVote == 1 ? 'text-red-500' : null}`}></i>
                     </div>
                     <p className="text-xs font-bold">{post.voteScore}</p>
                     {/* Downvote */}
@@ -122,11 +124,7 @@ const PostPage = () => {
                       className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-600"
                       onClick={() => vote(-1)}
                     >
-                      <i
-                        className={classNames('icon-arrow-down', {
-                          'text-blue-600': post.userVote === -1,
-                        })}
-                      ></i>
+                      <i className={`icon-arrow-down ${post.userVote == -1 ? 'text-blue-600' : null}`}></i>
                     </div>
                   </div>
                   <div className="py-2 pr-2">
@@ -229,11 +227,7 @@ const PostPage = () => {
                         className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
                         onClick={() => vote(1, comment)}
                       >
-                        <i
-                          className={classNames('icon-arrow-up', {
-                            'text-red-500': comment.userVote === 1,
-                          })}
-                        ></i>
+                        <i className={`icon-arrow-up ${comment.userVote == 1 ? 'text-red-500' : null}`}></i>
                       </div>
                       <p className="text-xs font-bold">{comment.voteScore}</p>
                       {/* Downvote */}
@@ -241,11 +235,7 @@ const PostPage = () => {
                         className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-600"
                         onClick={() => vote(-1, comment)}
                       >
-                        <i
-                          className={classNames('icon-arrow-down', {
-                            'text-blue-600': comment.userVote === -1,
-                          })}
-                        ></i>
+                        <i className={`icon-arrow-down ${comment.userVote == -1 ? 'text-blue-600' : null}`}></i>
                       </div>
                     </div>
                     <div className="py-2 pr-2">
@@ -271,10 +261,11 @@ const PostPage = () => {
             )}
           </div>
         </div>
-            {post && <Sidebar sub={post.sub}/>}
-        </div>
-        </>
-    )
+        {/* Sidebar */}
+        {post && <Sidebar sub={post.sub} />}
+      </div>
+    </>
+  )
 }
 
 export default PostPage

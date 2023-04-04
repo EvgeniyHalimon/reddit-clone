@@ -10,9 +10,9 @@ export interface Post {
     sub?: Sub
     // Virtual fields
     url: string
+    userVote: number
     voteScore?: number
     commentCount?: number
-    userVote?: number
   }
   
   export interface User {

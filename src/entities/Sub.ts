@@ -11,10 +11,8 @@ import Entity from './Entity'
 import User from './User'
 import Post from './Post'
 import { Expose } from 'class-transformer'
-
 import dotenv from 'dotenv'
 dotenv.config()
-
 @TOEntity('subs')
 export default class Sub extends Entity {
   constructor(sub: Partial<Sub>) {
@@ -52,7 +50,6 @@ export default class Sub extends Entity {
   get imageUrl(): string {
     return this.imageUrn
       ? `${process.env.APP_URL}/images/${this.imageUrn}`
-      
       : 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'
   }
 

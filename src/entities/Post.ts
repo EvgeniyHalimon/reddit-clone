@@ -19,7 +19,6 @@ import Vote from './Vote'
 
 @TOEntity('posts')
 export default class Post extends Entity {
-  static findOneOrFail: any
   constructor(post: Partial<Post>) {
     super()
     Object.assign(this, post)
@@ -54,11 +53,11 @@ export default class Post extends Entity {
   sub: Sub
 
   @Exclude()
-  @OneToMany(() => Comment, comment => comment.post)
+  @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[]
 
   @Exclude()
-  @OneToMany(() => Vote, vote => vote.post)
+  @OneToMany(() => Vote, (vote) => vote.post)
   votes: Vote[]
 
   @Expose() get url(): string {
@@ -70,10 +69,7 @@ export default class Post extends Entity {
   }
 
   @Expose() get voteScore(): number {
-    let accum = this.votes?.reduce((prev, curr) => {
-      return prev + (Number(curr.value) || 0)
-    }, 0)
-    return accum
+    return this.votes?.reduce((prev, curr) => prev + (Number(curr.value) == -1 ? 0 : Number(curr.value)), 0)
   }
 
   protected userVote: number

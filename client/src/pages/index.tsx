@@ -12,9 +12,22 @@ import Link from 'next/link';
 
 dayjs.extend(relativeTime)
 
-export default function Home({ posts, topSubs }) {
-  console.log("🚀 ~ file: index.tsx:14 ~ Home ~ topSubs:", topSubs)
-  /* const { data: posts } = useSWR('/posts') */
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  try {
+    const posts = await Axios.get('/posts')
+    console.log("🚀 ~ file: index.tsx:18 ~ constgetServerSideProps:GetServerSideProps= ~ posts:", posts.data)
+    
+    //!TODO
+    const topSubs = await Axios.get('/misc/top-subs')
+    return { props: { posts: posts.data, topSubs: topSubs.data } }
+  } catch (err) {
+    return { props: { error: 'Something went wrong' } }
+  }
+}
+
+export default function Home({ topSubs }) {
+  const { data: posts } = useSWR('/posts')
+  /* console.log("🚀 ~ file: index.tsx:14 ~ Home ~ topSubs:", posts[0]) */
 
   return (
     <Fragment>
@@ -62,12 +75,3 @@ export default function Home({ posts, topSubs }) {
 }
 
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  try {
-    const posts = await Axios.get('/posts')
-    const topSubs = await Axios.get('/misc/top-subs')
-    return { props: { posts: posts.data, topSubs: topSubs.data } }
-  } catch (err) {
-    return { props: { error: 'Something went wrong' } }
-  }
-}
