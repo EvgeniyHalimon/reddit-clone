@@ -9,6 +9,7 @@ import { Fragment } from 'react';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useAuthState } from '../context/auth';
 
 dayjs.extend(relativeTime)
 
@@ -28,45 +29,62 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function Home({ topSubs }) {
   const { data: posts } = useSWR('/posts')
   /* console.log("🚀 ~ file: index.tsx:14 ~ Home ~ topSubs:", posts[0]) */
-
+  const { authenticated } = useAuthState()
   return (
     <Fragment>
       <Head>
-        <title>Floppa sanctuary</title>
+        <title>readit: the front page of the internet</title>
       </Head>
       <div className="container flex pt-4">
-        <div className="w-160">
-          {posts?.map((post:Post) => (
-            <PostCard post={post} key={post.identifier}/>
+        {/* Posts feed */}
+        <div className="w-full px-4 md:w-160 md:p-0">
+          {posts?.map((post) => (
+            <PostCard post={post} key={post.identifier} />
           ))}
         </div>
-        <div className="ml-6 w-80">
+        {/* Sidebar */}
+        <div className="hidden ml-6 md:block w-80">
           <div className="bg-white rounded">
-            <div className="border-b-2 p4">
+            <div className="p-4 border-b-2">
               <p className="text-lg font-semibold text-center">
                 Top Communities
               </p>
             </div>
-            <>
-              {topSubs?.map((sub: Sub) => (
-                <div 
+            <div>
+              {topSubs?.map((sub) => (
+                <div
                   key={sub.name}
                   className="flex items-center px-4 py-2 text-xs border-b"
                 >
-                  <Image
-                    className='rounded-full'
-                    src={sub.imageUrl}
-                    alt="Sub"
-                    width={6*16/4}
-                    height={6*16/4}
-                  />
-                  <Link href={`/r/${sub.name}`} >
-                    <a className='ml-2 font-bold hover:cursor-pointer'>/r/{sub.name}</a>
+                  <Link href={`/r/${sub.name}`}>
+                    <a>
+                      <Image
+                        src={sub.imageUrl}
+                        className="rounded-full cursor-pointer"
+                        alt="Sub"
+                        width={(6 * 16) / 4}
+                        height={(6 * 16) / 4}
+                      />
+                    </a>
                   </Link>
-                  <p className='ml-auto font-med'>{sub.postCount}</p>
+                  <Link href={`/r/${sub.name}`}>
+                    <a className="ml-2 font-bold hover:cursor-pointer">
+                      /r/{sub.name}
+                    </a>
+                  </Link>
+                  <p className="ml-auto font-med">{sub.postCount}</p>
                 </div>
               ))}
-            </>
+            </div>
+            {authenticated && (
+              <div className="p-4 border-t-2">
+                <Link href="/subs/create">
+                  <a className="w-full px-2 py-1 blue button">
+                    Create Community
+                  </a>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
