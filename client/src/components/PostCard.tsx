@@ -5,23 +5,35 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import ActionButton from './ActionButton';
 import Axios  from 'axios';
 import classNames from 'classnames';
+import { useAuthState } from "../context/auth";
+import { useRouter } from "next/router";
+import Image from "next/image";
 
 dayjs.extend(relativeTime)
 
 interface IPostCard{
-    post: Post
+    post: Post,
+    mutate?(): any
 }
 
-const PostCard: React.FC<IPostCard> = ({ post }) => {
+const PostCard: React.FC<IPostCard> = ({ post, mutate }) => {
+    const { authenticated } = useAuthState()
+
+    const router = useRouter()
+
+    const isInSubPage = router.pathname === '/r/[sub]'
 
     const vote = async (value) => {
+        if(!authenticated) router.push('/login')
+        if(value === post.userVote) value = 0
         try {
-            const res = await Axios.post('/misc/vote', {
+            await Axios.post('/misc/vote', {
                 identifier : post.identifier,
                 slug: post.slug,
                 value: value
             })
-            console.log(res.data);
+
+            if(mutate) mutate()
             
         } catch (error) {
             console.log(error);
@@ -32,6 +44,7 @@ const PostCard: React.FC<IPostCard> = ({ post }) => {
         <div
             key={post.identifier}
             className="flex mb-4 bg-white rounded"
+            id={post.identifier}
         >
             <div className="w-10 py-3 text-center bg-gray-200 rounded-l">
                 <div
@@ -50,16 +63,27 @@ const PostCard: React.FC<IPostCard> = ({ post }) => {
             </div>
             <div className="w-full p-2">
                 <div className="flex items-center">
-                    <Link href={`/r/${post.subName}`}>
-                        <img className="w-6 h-6 mr-1 rounded-full cursor-pointer" src="https://play-lh.googleusercontent.com/70v2P2iEq51cg0j6oYMDjVOPOPCGfuYeqJDEn4n27W9BRm-xW-9Pb96k-0Q3c8qPhKUB" alt="subpic"/>
-                    </Link>
-                    <Link href={`/r/${post.subName}`}>
-                        <a className="text-xs font-bold cursor-pointer hover:underline">
-                            /r/{post.subName}
-                        </a>
-                    </Link>
+                    {!isInSubPage && 
+                    <>
+                        <Link href={`/r/${post.subName}`}>
+                            <Image 
+                                className="w-6 h-6 rounded-full cursor-pointer" 
+                                /* src="https://play-lh.googleusercontent.com/70v2P2iEq51cg0j6oYMDjVOPOPCGfuYeqJDEn4n27W9BRm-xW-9Pb96k-0Q3c8qPhKUB"  */
+                                src={post.sub.imageUrl}
+                                alt="subpic"
+                                width={20}
+                                height={20}
+                            />
+                        </Link>
+                        <Link href={`/r/${post.subName}`}>
+                            <a className="ml-1 text-xs font-bold cursor-pointer hover:underline">
+                                /r/{post.subName}
+                            </a>
+                        </Link>
+                      <span className="mx-1">&#8226;</span>
+                    </>
+                    }
                     <p className="text-xs text-gray-600">
-                        <span className="mx-1">&#8226;</span>
                         Posted by
                         <Link href={`/u/${post.username}`}>
                             <a className="mx-1 hover:underline">

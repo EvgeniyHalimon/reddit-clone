@@ -12,6 +12,9 @@ import Axios from 'axios'
 import Logo from '../../../public/images/floppa-logo.jpg'
 import Sidebar from '../../components/Sidebar'
 
+const metaDescription = '/b'
+const metaTitle = 'Floppedit: the front page of the internet'
+
 export default function SubPage() {
   // Local state
   const [ownSub, setOwnSub] = useState(false)
@@ -72,6 +75,10 @@ export default function SubPage() {
     <div>
       <Head>
         <title>{sub?.title}</title>
+        <meta property='og:title' content={sub?.title}/>
+        <meta name="og:description" content={sub?.description} />
+        <meta property='twitter:title' content={sub?.title}/>
+        <meta name="twitter:description" content={sub?.description} />
       </Head>
 
       {sub && (

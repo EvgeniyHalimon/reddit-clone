@@ -82,6 +82,10 @@ const PostPage = () => {
     <>
       <Head>
         <title>{post?.title}</title>
+        <meta property='og:title' content={post?.title}/>
+        <meta name="og:description" content={post?.body} />
+        <meta property='twitter:title' content={post?.title}/>
+        <meta name="twitter:description" content={post?.body} />
       </Head>
       <Link href={`/r/${sub}`}>
         <a>

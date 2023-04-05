@@ -5,7 +5,8 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import PostCard from '../components/PostCard';
 import useSWR from 'swr'
-import { Fragment } from 'react';
+import useSWRInfinite from 'swr/infinite'
+import { Fragment, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,13 +14,17 @@ import { useAuthState } from '../context/auth';
 
 dayjs.extend(relativeTime)
 
+const metaDescription = '/b'
+const metaTitle = 'Floppedit: the front page of the internet'
+
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const posts = await Axios.get('/posts')
+    const posts = await Axios.get<Post[]>('/posts')
     console.log("🚀 ~ file: index.tsx:18 ~ constgetServerSideProps:GetServerSideProps= ~ posts:", posts.data)
     
     //!TODO
-    const topSubs = await Axios.get('/misc/top-subs')
+    const topSubs = await Axios.get<Sub[]>('/misc/top-subs')
     return { props: { posts: posts.data, topSubs: topSubs.data } }
   } catch (err) {
     return { props: { error: 'Something went wrong' } }
@@ -27,20 +32,55 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 export default function Home({ topSubs }) {
-  const { data: posts } = useSWR('/posts')
-  /* console.log("🚀 ~ file: index.tsx:14 ~ Home ~ topSubs:", posts[0]) */
+  const [observerdPost, setObservedPost] = useState('')
+  /* const { data: posts } = useSWR<Post[]>(`/posts?page=0`) */
   const { authenticated } = useAuthState()
+  const { data, error, mutate, size: page, setSize: setPage } = useSWRInfinite((index) => `/posts?page=${index}`)
+
+  const posts: Post[] = data ? [].concat(...data) : [];
+  const isInitialLoading = !data && !error
+
+  const observeElement = (element: HTMLElement) => {
+    if(!element) return
+    const observer = new IntersectionObserver((entries) => {
+      if(entries[0].isIntersecting === true){
+        console.log('BOTTOM');
+        observer.unobserve(element)
+        setPage(page + 1)
+      }
+    }, {threshold : 1})
+    observer.observe(element)
+  }
+
+  useEffect(() => {
+    if(!posts || posts.length === 0) return
+
+    const id = posts[posts.length - 1].identifier
+    if(id !== observerdPost){
+      setObservedPost(id)
+      observeElement(document.getElementById(id))
+    }
+  }, [posts])
+
+  
+  
   return (
     <Fragment>
       <Head>
-        <title>readit: the front page of the internet</title>
+        <title>Floppedit: the front page of the internet</title>
+        <meta property='og:title' content={`@${metaTitle}`}/>
+        <meta name="og:description" content={metaDescription} />
+        <meta property='twitter:title' content={metaTitle}/>
+        <meta name="twitter:description" content={metaDescription} />
       </Head>
       <div className="container flex pt-4">
         {/* Posts feed */}
         <div className="w-full px-4 md:w-160 md:p-0">
+          {isInitialLoading && <p className="text-lg text-center">Loading..</p>}
           {posts?.map((post) => (
-            <PostCard post={post} key={post.identifier} />
+            <PostCard post={post} key={`${post.identifier}${post.title}`} mutate={mutate}/>
           ))}
+          {isInitialLoading && posts.length > 0 && <p className="text-lg text-center">Loading more..</p>}
         </div>
         {/* Sidebar */}
         <div className="hidden ml-6 md:block w-80">

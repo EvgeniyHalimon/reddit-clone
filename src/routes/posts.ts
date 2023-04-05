@@ -29,14 +29,18 @@ const createPost = async (req: Request, res: Response) => {
   }
 }
 
-const getPosts = async (_: Request, res: Response) => {
+const getPosts = async (req: Request, res: Response) => {
+  const currentPage: number = (req.query.page || 0) as number
+  const postsPerPage: number = (req.query.count || 8) as number
+  console.log("🚀 ~ file: posts.ts:35 ~ getPosts ~ postsPerPage:", postsPerPage)
   try {
     const posts = await Post.find({
       order: { createdAt: 'DESC' },
       relations: ['sub', 'votes', 'comments'],
+      skip: currentPage * postsPerPage,
+      take: postsPerPage
     })
     if (res.locals.user) {
-      console.log("🚀 ~ file: posts.ts:59 ~ getPost ~ res.locals.user:", res.locals.user)
       posts.forEach((p) => p.setUserVote(res.locals.user))
     }
 
