@@ -13,7 +13,8 @@
       "@types/react": "^17.0.39",
       "bcrypt": "^5.0.1",
       "concurrently": "^7.0.0",
-      "nodemon": "^2.0.15",
+      "kill-port": "^2.0.1",
+      "nodemon": "^2.0.22",
       "ts-node": "^10.5.0",
       "typescript": "^4.5.5"
    },
@@ -37,7 +38,7 @@
    "scripts": {
       "start": "ts-node src/server.ts",
       "typeorm": "ts-node ./node_modules/typeorm/cli.js",
-      "server": "nodemon --exec ts-node src/server.ts",
+      "server": "nodemon \"kill-port 5000\" --exec ts-node src/server.ts",
       "client": "cd client && npm run dev",
       "dev": "concurrently \"npm run server\" \"npm run client\" -n server,client",
       "seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
