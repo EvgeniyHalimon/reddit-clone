@@ -109,7 +109,6 @@ const uploadSubImage = async (req: Request, res: Response) => {
   const sub: Sub = res.locals.sub
   try {
     const type = req.body.type
-    console.log(req.file)
 
     if (type !== 'image' && type !== 'banner') {
       fs.unlinkSync(req.file.path)
