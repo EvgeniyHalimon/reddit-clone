@@ -1,7 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config()
 
-export = {
+const rootDir = process.env.NODE_ENV === 'development' ? 'src' : 'build'
+
+export default {
    type: process.env.TYPE,
    host: process.env.HOST,
    port: process.env.DATABASE_PORT,
@@ -9,20 +11,20 @@ export = {
    password: process.env.PASSWORD,
    database: process.env.DATABASENAME,
    synchronize: false,
-   logging: true,
+   logging: process.env.NODE_ENV === 'development',
    entitie: [
-      "src/entities/**/*.ts"
+      rootDir + "/entities/**/*{.ts,.js}"
    ],
    migrations: [
-      "src/migrations/**/*.ts"
+      rootDir + "/migrations/**/*{.ts,.js}"
    ],
    subscribers: [
-      "src/subscribers/**/*.ts"
+      rootDir + "/subscribers/**/*{.ts,.js}"
    ],
-   seeds: ["src/seeds/**/*{.ts,.js}"],
+   seeds: [rootDir + "/seeds/**/*{.ts,.js}"],
    cli: {
-      entitiesDir: "src/entities",
-      migrationsDir: "src/migrations",
-      subscribersDir: "src/subscribers"
+      entitiesDir: rootDir + "/entities",
+      migrationsDir: rootDir + "/migrations",
+      subscribersDir: rootDir + "/subscribers"
    }
 }
