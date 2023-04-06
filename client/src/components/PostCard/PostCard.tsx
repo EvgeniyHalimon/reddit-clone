@@ -1,13 +1,14 @@
 import Link from "next/link"
-import { Post } from "../types";
+import { Post } from "../../types";
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import ActionButton from './ActionButton';
+import ActionButton from '../ActionButton';
 import Axios  from 'axios';
-import classNames from 'classnames';
-import { useAuthState } from "../context/auth";
+import { useAuthState } from "../../context/auth";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import VoteSection from "./VoteSection";
+import CommentSection from "./CommentSection";
 
 dayjs.extend(relativeTime)
 
@@ -17,28 +18,10 @@ interface IPostCard{
 }
 
 const PostCard: React.FC<IPostCard> = ({ post, mutate }) => {
-    const { authenticated } = useAuthState()
 
     const router = useRouter()
 
     const isInSubPage = router.pathname === '/r/[sub]'
-
-    const vote = async (value) => {
-        if(!authenticated) router.push('/login')
-        if(value === post.userVote) value = 0
-        try {
-            await Axios.post('/misc/vote', {
-                identifier : post.identifier,
-                slug: post.slug,
-                value: value
-            })
-
-            if(mutate) mutate()
-            
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     return(
         <div
@@ -46,21 +29,10 @@ const PostCard: React.FC<IPostCard> = ({ post, mutate }) => {
             className="flex mb-4 bg-white rounded"
             id={post.identifier}
         >
-            <div className="w-10 py-3 text-center bg-gray-200 rounded-l">
-                <div
-                    className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
-                    onClick={() => vote(1)}
-                >
-                    <i className={`icon-arrow-up ${post.userVote == 1 ? 'text-red-500' : null}`}></i>
-                </div>
-                <p className="text-xs font-bold">{post.voteScore}</p>
-                <div 
-                    className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-600"
-                    onClick={() => vote(-1)}
-                >
-                    <i className={`icon-arrow-down ${post.userVote == -1 ? 'text-blue-600' : null}`}></i>
-                </div>
-            </div>
+            <VoteSection 
+                post={post} 
+                mutate={mutate}
+            />
             <div className="w-full p-2">
                 <div className="flex items-center">
                     {!isInSubPage && 
@@ -103,24 +75,7 @@ const PostCard: React.FC<IPostCard> = ({ post, mutate }) => {
                     </a>
                 </Link>
                 {post.body && <p className="my-1 text-sm">{post.body}</p>}
-                <div className="flex">
-                    <Link href={post.url}>
-                        <a>
-                        <ActionButton>
-                            <i className="mr-1 fas fa-comment-alt fa-xs"></i>
-                            <span className="font-bold">{post.commentCount} Comments</span>
-                        </ActionButton>
-                        </a>
-                    </Link>
-                    <ActionButton>
-                        <i className="mr-1 fas fa-share fa-xs"></i>
-                        <span className="font-bold">Share</span>
-                    </ActionButton>
-                    <ActionButton>
-                        <i className="mr-1 fas fa-bookmark fa-xs"></i>
-                        <span className="font-bold">Save</span>
-                    </ActionButton>
-                </div>
+                <CommentSection post={post} />
             </div>
         </div>
     )

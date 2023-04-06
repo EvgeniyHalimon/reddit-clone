@@ -5,9 +5,7 @@ import Axios from 'axios'
 import { useRouter } from 'next/router'
 import UniversalInput from '../components/UniversalInput'
 import { useAuthState } from '../context/auth'
-
-
-console.log(process.env.BASE_URL);
+import AuthBackground from '../components/AuthBackground'
 
 //!TODO: refactor form
 export default function Register() {
@@ -48,10 +46,7 @@ return (
         <Head>
             <title>Register</title>
         </Head>
-        <div
-            className="h-screen bg-left-bottom bg-cover w-36"
-            style={{ backgroundImage: "url('/images/floppa.png')" }}
-        ></div>
+        <AuthBackground/>
         <div className="flex flex-col justify-center pl-6">
             <div className="w-70">
                 <h1 className="mb-2 text-lg font-medium">Sign Up</h1>

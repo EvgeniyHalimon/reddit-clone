@@ -5,14 +5,14 @@ import useSWR from 'swr'
 import Image from 'next/image'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import classNames from 'classnames'
 
 import { Post, Comment } from '../../../../types'
 import Sidebar from '../../../../components/Sidebar'
 import Axios from 'axios'
 import { useAuthState } from '../../../../context/auth'
-import ActionButton from '../../../../components/ActionButton'
 import { FormEvent, useState } from 'react'
+import VoteSection from '../../../../components/PostCard/VoteSection'
+import CommentSection from '../../../../components/PostCard/CommentSection'
 
 dayjs.extend(relativeTime)
 
@@ -60,7 +60,6 @@ const PostPage = () => {
       console.log(err)
     }
   }
-
   const submitComment = async (event: FormEvent) => {
     event.preventDefault()
     if (newComment.trim() === '') return
@@ -114,23 +113,11 @@ const PostPage = () => {
               <>
                 <div className="flex">
                   {/* Vote section */}
-                  <div className="flex-shrink-0 w-10 py-2 text-center rounded-l">
-                    {/* Upvote */}
-                    <div
-                      className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
-                      onClick={() => vote(1)}
-                    >
-                      <i className={`icon-arrow-up ${post.userVote == 1 ? 'text-red-500' : null}`}></i>
-                    </div>
-                    <p className="text-xs font-bold">{post.voteScore}</p>
-                    {/* Downvote */}
-                    <div
-                      className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-600"
-                      onClick={() => vote(-1)}
-                    >
-                      <i className={`icon-arrow-down ${post.userVote == -1 ? 'text-blue-600' : null}`}></i>
-                    </div>
-                  </div>
+                    <VoteSection 
+                      post={post} 
+                      mutate={mutate}
+                      slug={true}
+                    />
                   <div className="py-2 pr-2">
                     <div className="flex items-center">
                       <p className="text-xs text-gray-500">
@@ -152,26 +139,7 @@ const PostPage = () => {
                     {/* Post body */}
                     <p className="my-3 text-sm">{post.body}</p>
                     {/* Actions */}
-                    <div className="flex">
-                      <Link href={post.url}>
-                        <a>
-                          <ActionButton>
-                            <i className="mr-1 fas fa-comment-alt fa-xs"></i>
-                            <span className="font-bold">
-                              {post.commentCount} Comments
-                            </span>
-                          </ActionButton>
-                        </a>
-                      </Link>
-                      <ActionButton>
-                        <i className="mr-1 fas fa-share fa-xs"></i>
-                        <span className="font-bold">Share</span>
-                      </ActionButton>
-                      <ActionButton>
-                        <i className="mr-1 fas fa-bookmark fa-xs"></i>
-                        <span className="font-bold">Save</span>
-                      </ActionButton>
-                    </div>
+                    <CommentSection post={post} />
                   </div>
                 </div>
                 {/* Comment input area */}

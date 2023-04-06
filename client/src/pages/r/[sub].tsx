@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { ChangeEvent, createRef, Fragment, useEffect, useState } from 'react'
 import useSWR from 'swr'
-import PostCard from '../../components/PostCard'
+import PostCard from '../../components/PostCard/PostCard'
 import Image from 'next/image'
 import classNames from 'classnames'
 
@@ -11,9 +11,6 @@ import { useAuthState } from '../../context/auth'
 import Axios from 'axios'
 import Logo from '../../../public/images/floppa-logo.jpg'
 import Sidebar from '../../components/Sidebar'
-
-const metaDescription = '/b'
-const metaTitle = 'Floppedit: the front page of the internet'
 
 export default function SubPage() {
   // Local state

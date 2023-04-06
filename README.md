@@ -7,7 +7,7 @@ Steps to run this project:
 3. Setup .env files in server and client folders using .env.example
 4. Run `npm dev` command
 
-# Script
+# Scripts
 
 ## "start": "ts-node src/server.ts",
 ## "typeorm": "ts-node ./node_modules/typeorm/cli.js",

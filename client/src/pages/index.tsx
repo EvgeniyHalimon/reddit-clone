@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { Post, Sub } from '../types';
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import PostCard from '../components/PostCard';
+import PostCard from '../components/PostCard/PostCard';
 import useSWR from 'swr'
 import useSWRInfinite from 'swr/infinite'
 import { Fragment, useEffect, useState } from 'react';
@@ -23,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const posts = await Axios.get<Post[]>('/posts')
     console.log("🚀 ~ file: index.tsx:18 ~ constgetServerSideProps:GetServerSideProps= ~ posts:", posts.data)
     
-    //!TODO
+    //!TODO find solution
     const topSubs = await Axios.get<Sub[]>('/misc/top-subs')
     return { props: { posts: posts.data, topSubs: topSubs.data } }
   } catch (err) {

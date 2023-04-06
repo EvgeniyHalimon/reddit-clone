@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import { FormEvent, useState } from 'react'
 import UniversalInput from "../components/UniversalInput"
 import { useAuthDispatch, useAuthState } from "../context/auth"
+import AuthBackground from "../components/AuthBackground"
 
 //!TODO: refactor form
 const Login = () => {
@@ -16,6 +17,7 @@ const Login = () => {
     const {authenticated} = useAuthState()
     
     const router = useRouter()
+    console.log("🚀 ~ file: login.tsx:19 ~ Login ~ router:", router)
     if(authenticated) router.push("/")
     
     const submitForm = async (event: FormEvent) => {
@@ -27,7 +29,6 @@ const Login = () => {
                 username,
             })
             dispatch('LOGIN',res.data)
-            console.log("🚀 ~ file: login.tsx:17 ~ Login ~ authenticated:", authenticated)
 
             router.back()
         } catch (err) {
@@ -40,10 +41,7 @@ return (
         <Head>
             <title>Login</title>
         </Head>
-        <div
-            className="h-screen bg-right-bottom bg-cover w-36"
-            style={{ backgroundImage: "url('/images/floppa.png')" }}
-        ></div>
+        <AuthBackground/>
         <div className="flex flex-col justify-center pl-6">
             <div className="w-70">
                 <h1 className="mb-2 text-lg font-medium">Log in</h1>
@@ -70,8 +68,8 @@ return (
                 </form>
                 <small>
                     New to Floppedit?
-                    <Link href="/login">
-                        <a className="ml-1 text-blue-500 uppercase">Log In</a>
+                    <Link href="/register">
+                        <a className="ml-1 text-blue-500 uppercase">Sign up</a>
                     </Link>
                 </small>
             </div>

@@ -60,11 +60,11 @@ const Navbar: React.FC = () => {
     <div className="fixed inset-x-0 top-0 z-10 flex items-center justify-between h-12 px-5 bg-white">
       {/* Logo and title */}
       <div className="flex items-center">
-            <Link href="/">
-                <a className="mr-2">
-                    <Image src={Logo} width={50} height={50} alt='logo' className="mr-10 rounded-3xl"/>
-                </a>
-            </Link>
+        <Link href="/">
+            <a className="mr-2">
+                <Image src={Logo} width={50} height={50} alt='logo' className="mr-10 rounded-3xl"/>
+            </a>
+        </Link>
         <span className="hidden text-2xl font-semibold lg:block">
           <Link href="/">Floppedit</Link>
         </span>
