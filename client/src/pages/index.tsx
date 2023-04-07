@@ -101,7 +101,7 @@ export default function Home({ topSubs }) {
                       <Image
                         src={sub.imageUrl}
                         className="rounded-full cursor-pointer"
-                        alt="Sub"
+                        alt={sub.name + '-pic'}
                         width={(6 * 16) / 4}
                         height={(6 * 16) / 4}
                       />

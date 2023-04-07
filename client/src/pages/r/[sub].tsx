@@ -115,7 +115,7 @@ export default function SubPage() {
                 <div className="absolute" style={{ top: -15 }}>
                   <Image
                     src={sub.imageUrl || Logo}
-                    alt="Sub"
+                    alt={sub.name + '-pic'}
                     className={classNames('rounded-full', {
                       'cursor-pointer': ownSub,
                     })}

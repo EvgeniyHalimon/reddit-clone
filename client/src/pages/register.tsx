@@ -7,6 +7,7 @@ import UniversalInput from '../components/UniversalInput'
 import { useAuthState } from '../context/auth'
 import AuthBackground from '../components/AuthBackground'
 import ErrorMessage from '../components/ErrorMessage'
+import SubmitButton from '../components/SubmitButton'
 
 //!TODO: refactor form
 export default function Register() {
@@ -91,9 +92,7 @@ return (
                         placeholder="PASSWORD"
                         error={errors.password}
                     />
-                    <button className="w-full py-2 mb-4 text-xs font-bold text-white uppercase bg-blue-500 border border-blue-500 rounded">
-                        Sign Up
-                    </button>
+                    <SubmitButton buttonText="Sign Up"/>
                 </form>
                 <small>
                     Already a floppeditor?

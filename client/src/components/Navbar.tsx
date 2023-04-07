@@ -93,7 +93,7 @@ const Navbar: React.FC = () => {
                 <Image
                   src={sub.imageUrl}
                   className="rounded-full"
-                  alt="Sub"
+                  alt={sub.name + '-pic'}
                   height={(8 * 16) / 4}
                   width={(8 * 16) / 4}
                 />

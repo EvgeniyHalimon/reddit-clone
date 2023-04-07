@@ -42,7 +42,7 @@ const PostCard: React.FC<IPostCard> = ({ post, mutate }) => {
                                 className="w-6 h-6 rounded-full cursor-pointer" 
                                 /* src="https://play-lh.googleusercontent.com/70v2P2iEq51cg0j6oYMDjVOPOPCGfuYeqJDEn4n27W9BRm-xW-9Pb96k-0Q3c8qPhKUB"  */
                                 src={post.sub.imageUrl}
-                                alt="subpic"
+                                alt={post.subName + '-pic'}
                                 width={20}
                                 height={20}
                             />

@@ -6,6 +6,7 @@ import { FormEvent, useRef, useState } from 'react'
 import UniversalInput from "../components/UniversalInput"
 import { useAuthDispatch, useAuthState } from "../context/auth"
 import AuthBackground from "../components/AuthBackground"
+import SubmitButton from "../components/SubmitButton"
 
 //!TODO: refactor form
 const Login = () => {
@@ -61,9 +62,7 @@ return (
                         placeholder="PASSWORD"
                         error={errors.password}
                     />
-                    <button className="w-full py-2 mb-4 text-xs font-bold text-white uppercase bg-blue-500 border border-blue-500 rounded">
-                        Log in
-                    </button>
+                    <SubmitButton buttonText="Log in"/>
                 </form>
                 <small>
                     New to Floppedit?
