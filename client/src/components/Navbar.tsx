@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
     Axios.get('/auth/logout')
       .then(() => {
         dispatch('LOGOUT')
-        window.location.reload()
+        
       })
       .catch((err) => console.log(err))
   }
@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
   }
 
   return (
-    <div className="fixed inset-x-0 top-0 z-10 flex items-center justify-between h-12 px-5 bg-white">
+    <div className="fixed inset-x-0 top-0 z-10 flex items-center justify-between h-16 px-5 bg-white">
       {/* Logo and title */}
       <div className="flex items-center">
         <Link href="/">

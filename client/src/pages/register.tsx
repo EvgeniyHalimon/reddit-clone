@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useRef, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Axios from 'axios'
@@ -9,9 +9,9 @@ import AuthBackground from '../components/AuthBackground'
 
 //!TODO: refactor form
 export default function Register() {
-    const [email, setEmail] = useState('')
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const emailRef = useRef<HTMLInputElement | null>(null)
+    const usernameRef = useRef<HTMLInputElement | null>(null)
+    const passwordRef = useRef<HTMLInputElement | null>(null)
     const [agreement, setAgreement] = useState(false)
     const [errors, setErrors] = useState<any>({})
     const router = useRouter()
@@ -30,11 +30,13 @@ export default function Register() {
     
         try {
             await Axios.post('/auth/register', {
-                email,
-                password,
-                username,
+                email: emailRef.current.value,
+                password: passwordRef.current.value,
+                username: usernameRef.current.value,
             })
-    
+            emailRef.current.value = ''
+            passwordRef.current.value = ''
+            usernameRef.current.value = ''
             router.push('/login')
         } catch (err) {
             setErrors(err)
@@ -72,24 +74,21 @@ return (
                     <UniversalInput
                         className="mb-2"
                         type="email"
-                        value={email}
-                        setValue={setEmail}
+                        refs={emailRef}
                         placeholder="EMAIL"
                         error={errors.email}
                     />
                     <UniversalInput
                         className="mb-2"
                         type="text"
-                        value={username}
-                        setValue={setUsername}
+                        refs={usernameRef}
                         placeholder="USERNAME"
                         error={errors.username}
                     />
                     <UniversalInput
                         className="mb-4"
                         type="password"
-                        value={password}
-                        setValue={setPassword}
+                        refs={passwordRef}
                         placeholder="PASSWORD"
                         error={errors.password}
                     />

@@ -1,21 +1,20 @@
 import classNames from 'classnames'
+import { MutableRefObject } from 'react'
 
 interface InputGroupProps {
     className?: string
     type: string
     placeholder: string
-    value: string
+    refs: any
     error: string | undefined
-    setValue: (str: string) => void
 }
 
 const UniversalInput: React.FC<InputGroupProps> = ({
     className,
     type,
     placeholder,
-    value,
+    refs,
     error,
-    setValue,
     }) => {
     return (
         <div className={className}>
@@ -26,8 +25,7 @@ const UniversalInput: React.FC<InputGroupProps> = ({
                 { 'border-red-500': error }
                 )}
                 placeholder={placeholder}
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
+                ref={refs}
             />
             <small className="font-medium text-red-600">{error}</small>
         </div>

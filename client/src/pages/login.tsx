@@ -2,22 +2,22 @@ import Axios from "axios"
 import Link from "next/link"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { FormEvent, useState } from 'react'
+import { FormEvent, useRef, useState } from 'react'
 import UniversalInput from "../components/UniversalInput"
 import { useAuthDispatch, useAuthState } from "../context/auth"
 import AuthBackground from "../components/AuthBackground"
 
 //!TODO: refactor form
 const Login = () => {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const usernameRef = useRef<HTMLInputElement | null>(null)
+    const passwordRef = useRef<HTMLInputElement | null>(null)
     const [errors, setErrors] = useState<any>({})
 
     const dispatch = useAuthDispatch()
     const {authenticated} = useAuthState()
     
     const router = useRouter()
-    console.log("🚀 ~ file: login.tsx:19 ~ Login ~ router:", router)
+    console.log("🚀 ~ file: login.tsx:19 ~ Login ~ router:", usernameRef, passwordRef)
     if(authenticated) router.push("/")
     
     const submitForm = async (event: FormEvent) => {
@@ -25,12 +25,13 @@ const Login = () => {
         
         try {
             const res = await Axios.post('/auth/login',{
-                password,
-                username,
+                username: usernameRef.current.value,
+                password: passwordRef.current.value,
             })
             dispatch('LOGIN',res.data)
-
-            router.back()
+            router.push("/")
+            usernameRef.current.value = ''
+            passwordRef.current.value = ''
         } catch (err) {
             setErrors(err.response.data)
         }
@@ -49,16 +50,14 @@ return (
                     <UniversalInput
                         className="mb-2"
                         type="text"
-                        value={username}
-                        setValue={setUsername}
+                        refs={usernameRef}
                         placeholder="USERNAME"
                         error={errors.username}
                     />
                     <UniversalInput
                         className="mb-4"
                         type="password"
-                        value={password}
-                        setValue={setPassword}
+                        refs={passwordRef}
                         placeholder="PASSWORD"
                         error={errors.password}
                     />
