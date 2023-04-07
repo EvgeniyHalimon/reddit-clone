@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import { MutableRefObject } from 'react'
+import ErrorMessage from './ErrorMessage'
 
 interface InputGroupProps {
     className?: string
@@ -27,7 +28,7 @@ const UniversalInput: React.FC<InputGroupProps> = ({
                 placeholder={placeholder}
                 ref={refs}
             />
-            <small className="font-medium text-red-600">{error}</small>
+           <ErrorMessage error={error}/>
         </div>
     )
 }

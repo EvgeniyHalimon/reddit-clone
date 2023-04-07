@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import UniversalInput from '../components/UniversalInput'
 import { useAuthState } from '../context/auth'
 import AuthBackground from '../components/AuthBackground'
+import ErrorMessage from '../components/ErrorMessage'
 
 //!TODO: refactor form
 export default function Register() {
@@ -67,9 +68,7 @@ return (
                         <label htmlFor="agreement" className="text-xs cursor-pointer">
                             I agree to get emails about cool stuff on Floppedit
                         </label>
-                        <small className="block font-medium text-red-600">
-                            {errors.agreement}
-                        </small>
+                        <ErrorMessage error={errors.agreement}/>
                     </div>
                     <UniversalInput
                         className="mb-2"

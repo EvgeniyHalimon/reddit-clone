@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { FormEvent, useState } from 'react'
 import classNames from 'classnames'
 import { useRouter } from 'next/router'
+import ErrorMessage from '../../components/ErrorMessage'
 
 const Create = () => {
   const [name, setName] = useState('')
@@ -56,7 +57,7 @@ const Create = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
-              <small className="font-medium text-red-600">{errors.name}</small>
+              <ErrorMessage error={errors.name}/>
             </div>
             <div className="my-6">
               <p className="font-medium">Title</p>
@@ -73,7 +74,7 @@ const Create = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
-              <small className="font-medium text-red-600">{errors.title}</small>
+              <ErrorMessage error={errors.title}/>
             </div>
             <div className="my-6">
               <p className="font-medium">Description</p>
@@ -88,9 +89,7 @@ const Create = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
-              <small className="font-medium text-red-600">
-                {errors.description}
-              </small>
+              <ErrorMessage error={errors.description}/>
             </div>
             <div className="flex justify-end">
               <button className="px-4 py-1 text-sm font-semibold capitalize blue button">
