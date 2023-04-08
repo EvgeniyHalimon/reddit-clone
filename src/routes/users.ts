@@ -1,8 +1,8 @@
 import { Request, Response, Router } from 'express'
+
 import Comment from '../entities/Comment'
 import Post from '../entities/Post'
 import User from '../entities/User'
-
 import user from '../middleware/user'
 
 const getUserSubmissions = async (req: Request, res: Response) => {
