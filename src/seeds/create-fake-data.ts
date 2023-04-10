@@ -2,14 +2,16 @@ import { Seeder } from 'typeorm-seeding'
 import { Connection } from 'typeorm'
 import bcrypt from 'bcrypt'
 
-import User from '../entities/User'
-import Sub from '../entities/Sub'
-import Post from '../entities/Post'
-import Comment from '../entities/Comment'
-import Vote from '../entities/Vote'
+import User from '../modules/users/users.entity'
+import Sub from '../modules/subs/subs.entity'
+import Post from '../modules/posts/posts.entity'
+import Comment from '../modules/comment/comment.entity'
+import Vote from '../modules/vote/vote.entity'
+import { userRepository } from '../modules/auth/auth.repository'
+import { subsRepository } from '../modules/subs/subs.repository'
 
 function timePlus(duration = 0) {
-    const time = new Date('2020-11-07 07:01:43.18').getTime()
+    const time = new Date('2023-04-04 07:01:43.18').getTime()
 
     return new Date(time + duration).toISOString()
 }
@@ -44,9 +46,10 @@ export default class CreateData implements Seeder {
             },
         ])
         .execute()
-
-        const john = await User.findOne({ username: 'john' })
-        const jane = await User.findOne({ username: 'jane' })
+        
+        
+        const john = await userRepository.findUsername('john')
+        const jane = await userRepository.findUsername('jane')
 
         // Create subs
         await connection
@@ -107,10 +110,10 @@ export default class CreateData implements Seeder {
         ])
         .execute()
 
-    const reactJsSub = await Sub.findOne({ where: { name: 'reactjs' } })
-    const funnySub = await Sub.findOne({ where: { name: 'funny' } })
-    const iqSub = await Sub.findOne({ where: { name: 'InsightfulQuestions' } })
-    const oneliners = await Sub.findOne({ where: { name: 'oneliners' } })
+    const reactJsSub = await subsRepository.findSub('reactjs')
+    const funnySub = await subsRepository.findSub('funny')
+    const iqSub = await subsRepository.findSub('InsightfulQuestions')
+    const oneliners = await subsRepository.findSub('oneliners')
 
     // Create posts
         await connection

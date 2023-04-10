@@ -4,9 +4,10 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import cookie from 'cookie'
 
-import User from '../entities/User'
-import auth from '../middleware/auth'
-import user from '../middleware/user'
+import User from '../users/users.entity'
+import auth from '../../middleware/auth'
+import user from '../../middleware/user'
+import { userRepository } from './auth.repository'
 
 const mapErrors = (errors: Object[]) => {
   return errors.reduce((prev: any, err: any) => {
@@ -21,8 +22,8 @@ const register = async (req: Request, res: Response) => {
   try {
     // Validate data
     let errors: any = {}
-    const emailUser = await User.findOne({ email })
-    const usernameUser = await User.findOne({ username })
+    const emailUser = await userRepository.findEmail(email)
+    const usernameUser = await userRepository.findUsername(username)
 
     if (emailUser) errors.email = 'Email is already taken'
     if (usernameUser) errors.username = 'Username is already taken'
@@ -61,7 +62,7 @@ const login = async (req: Request, res: Response) => {
       return res.status(400).json(errors)
     }
 
-    const user = await User.findOne({ username })
+    const user = await userRepository.findUsername(username)
 
     if (!user) return res.status(404).json({ username: 'User not found' })
 

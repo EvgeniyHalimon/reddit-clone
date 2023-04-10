@@ -1,10 +1,14 @@
 import { Router, Request, Response } from 'express'
 
-import Comment from '../entities/Comment'
-import Post from '../entities/Post'
-import Sub from '../entities/Sub'
-import auth from '../middleware/auth'
-import user from '../middleware/user'
+import Comment from '../comment/comment.entity'
+import Post from './posts.entity'
+import Sub from '../subs/subs.entity'
+import auth from '../../middleware/auth'
+import user from '../../middleware/user'
+import { postsRepository } from './posts.repository'
+import { IPostQueries } from './types'
+import { subsRepository } from '../subs/subs.repository'
+import { commentRepository } from '../comment/comment.repository'
 
 const createPost = async (req: Request, res: Response) => {
   const { title, body, sub } = req.body
@@ -17,7 +21,7 @@ const createPost = async (req: Request, res: Response) => {
 
   try {
     // find sub
-    const subRecord = await Sub.findOneOrFail({ name: sub })
+    const subRecord = await subsRepository.findSubOfFail(sub)
 
     const post = new Post({ title, body, user, sub: subRecord })
     await post.save()
@@ -30,15 +34,11 @@ const createPost = async (req: Request, res: Response) => {
 }
 
 const getPosts = async (req: Request, res: Response) => {
-  const currentPage: number = (req.query.page || 0) as number
+  const currentPage: number = (req.query.page || 0)  as number
   const postsPerPage: number = (req.query.count || 8) as number
   try {
-    const posts = await Post.find({
-      order: { createdAt: 'DESC' },
-      relations: ['sub', 'votes', 'comments'],
-      skip: currentPage * postsPerPage,
-      take: postsPerPage
-    })
+    const posts = await postsRepository.getAllPosts(currentPage, postsPerPage)
+
     if (res.locals.user) {
       posts.forEach((p) => p.setUserVote(res.locals.user))
     }
@@ -53,10 +53,12 @@ const getPosts = async (req: Request, res: Response) => {
 const getPost = async (req: Request, res: Response) => {
   const { identifier, slug } = req.params
   try {
-    const post = await Post.findOneOrFail(
-      { identifier, slug },
-      { relations: ['sub', 'votes', 'comments'] }
-    )
+    const queries : IPostQueries = {
+      identifier: identifier,
+      slug: slug,
+      relationsArray: ['sub', 'votes', 'comments']
+    }
+    const post = await postsRepository.getPostOrFail(queries)
 
     if (res.locals.user) {
       post.setUserVote(res.locals.user)
@@ -74,7 +76,7 @@ const commentOnPost = async (req: Request, res: Response) => {
   const body = req.body.body
 
   try {
-    const post = await Post.findOneOrFail({ identifier, slug })
+    const post = await postsRepository.findPostOrFail(identifier, slug)
 
     const comment = new Comment({
       body,
@@ -94,13 +96,9 @@ const commentOnPost = async (req: Request, res: Response) => {
 const getPostComments = async (req: Request, res: Response) => {
   const { identifier, slug } = req.params
   try {
-    const post = await Post.findOneOrFail({ identifier, slug })
+    const post = await postsRepository.findPostOrFail(identifier, slug)
 
-    const comments = await Comment.find({
-      where: { post },
-      order: { createdAt: 'DESC' },
-      relations: ['votes'],
-    })
+    const comments = await commentRepository.getCommentsForPost(post)
 
     if (res.locals.user) {
       comments.forEach((c) => c.setUserVote(res.locals.user))

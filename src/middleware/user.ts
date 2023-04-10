@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
-import User from '../entities/User'
+import User from '../modules/users/users.entity'
+import { userRepository } from '../modules/auth/auth.repository'
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -10,7 +11,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
     const { username }: any = jwt.verify(token, process.env.JWT_SECRET!)
 
-    const user = await User.findOne({ username })
+    const user = await userRepository.findUsername(username)
 
     res.locals.user = user
 

@@ -1,13 +1,17 @@
 import { Request, Response, Router } from 'express'
 import { getConnection } from 'typeorm'
 
-import Comment from '../entities/Comment'
-import Post from '../entities/Post'
-import Sub from '../entities/Sub'
-import User from '../entities/User'
-import Vote from '../entities/Vote'
-import auth from '../middleware/auth'
-import user from '../middleware/user'
+import Comment from '../comment/comment.entity'
+import Post from '../posts/posts.entity'
+import Sub from '../subs/subs.entity'
+import User from '../users/users.entity'
+import Vote from '../vote/vote.entity'
+import auth from '../../middleware/auth'
+import user from '../../middleware/user'
+import { postsRepository } from '../posts/posts.repository'
+import { IPostQueries } from '../posts/types'
+import { commentRepository } from '../comment/comment.repository'
+import { voteRepository } from '../vote/vote.repository'
 
 const vote = async (req: Request, res: Response) => {
   const { identifier, slug, commentIdentifier, value } = req.body
@@ -19,17 +23,17 @@ const vote = async (req: Request, res: Response) => {
 
   try {
     const user: User = res.locals.user
-    let post = await Post.findOneOrFail({ identifier, slug })
+    let post = await postsRepository.findPostOrFail(identifier, slug)
     let vote: Vote | undefined
     let comment: Comment | undefined
 
     if (commentIdentifier) {
       // IF there is a comment identifier find vote by comment
-      comment = await Comment.findOneOrFail({ identifier: commentIdentifier })
-      vote = await Vote.findOne({ user, comment })
+      comment = await commentRepository.getCommentOrFail(commentIdentifier)
+      vote = await voteRepository.findVoteByComment(user, comment)
     } else {
       // Else find vote by post
-      vote = await Vote.findOne({ user, post })
+      vote = await voteRepository.findVoteByPost(user, post)
     }
 
     if (!vote && value === 0) {
@@ -50,10 +54,13 @@ const vote = async (req: Request, res: Response) => {
       await vote.save()
     }
 
-    post = await Post.findOneOrFail(
-      { identifier, slug },
-      { relations: ['comments', 'comments.votes', 'sub', 'votes'] }
-    )
+    const queries : IPostQueries = {
+      identifier: identifier,
+      slug: slug,
+      relationsArray: ['comments', 'comments.votes', 'sub', 'votes']
+    }
+
+    post = await postsRepository.getPostOrFail(queries)
     post.setUserVote(user)
     post.comments.forEach((c) => c.setUserVote(user))
 

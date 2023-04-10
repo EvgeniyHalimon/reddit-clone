@@ -8,12 +8,12 @@ import {
   OneToMany,
 } from 'typeorm'
 
-import Entity from './Entity'
-import Post from './Post'
-import User from './User'
+import Entity from '../Base-entity/Entity'
+import Post from '../posts/posts.entity'
+import User from '../users/users.entity'
 
-import { makeId } from '../utils/helpers'
-import Vote from './Vote'
+import { makeId } from '../../utils/helpers'
+import Vote from '../vote/vote.entity'
 import { Exclude, Expose } from 'class-transformer'
 
 @TOEntity('comments')

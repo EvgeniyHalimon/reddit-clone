@@ -8,11 +8,11 @@ import cors from 'cors'
 
 dotenv.config()
 
-import authRoutes from './routes/auth'
-import postRoutes from './routes/posts'
-import subRoutes from './routes/subs'
-import miscRoutes from './routes/misc'
-import userRoutes from './routes/users'
+import authRoutes from './modules/auth/auth'
+import postRoutes from './modules/posts/posts'
+import subRoutes from './modules/subs/subs'
+import miscRoutes from './modules/misc/misc'
+import userRoutes from './modules/users/users'
 
 import trim from './middleware/trim'
 

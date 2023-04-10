@@ -5,12 +5,13 @@ import multer, { FileFilterCallback } from 'multer'
 import path from 'path'
 import fs from 'fs'
 
-import User from '../entities/User'
-import Sub from '../entities/Sub'
-import auth from '../middleware/auth'
-import user from '../middleware/user'
-import Post from '../entities/Post'
-import { makeId } from '../utils/helpers'
+import User from '../users/users.entity'
+import Sub from './subs.entity'
+import auth from '../../middleware/auth'
+import user from '../../middleware/user'
+import { makeId } from '../../utils/helpers'
+import { postsRepository } from '../posts/posts.repository'
+import { subsRepository } from './subs.repository'
 
 const createSub = async (req: Request, res: Response) => {
   const { name, title, description } = req.body
@@ -51,12 +52,8 @@ const getSub = async (req: Request, res: Response) => {
   const name = req.params.name
 
   try {
-    const sub = await Sub.findOneOrFail({ name })
-    const posts = await Post.find({
-      where: { sub },
-      order: { createdAt: 'DESC' },
-      relations: ['comments', 'votes'],
-    })
+    const sub = await subsRepository.findSubOfFail(name)
+    const posts = await postsRepository.findPostInSub(sub)
 
     sub.posts = posts
 
@@ -75,7 +72,7 @@ const ownSub = async (req: Request, res: Response, next: NextFunction) => {
   const user: User = res.locals.user
 
   try {
-    const sub = await Sub.findOneOrFail({ where: { name: req.params.name } })
+    const sub = await subsRepository.isOwnSubOfFail(req.params.name)
 
     if (sub.username !== user.username) {
       return res.status(403).json({ error: 'You dont own this sub' })

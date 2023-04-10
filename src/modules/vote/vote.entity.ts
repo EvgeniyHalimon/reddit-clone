@@ -1,9 +1,9 @@
 import { Entity as TOEntity, Column, ManyToOne, JoinColumn } from 'typeorm'
 
-import Entity from './Entity'
-import Post from './Post'
-import User from './User'
-import Comment from './Comment'
+import Entity from '../Base-entity/Entity'
+import Post from '../posts/posts.entity'
+import User from '../users/users.entity'
+import Comment from '../comment/comment.entity'
 
 @TOEntity('votes')
 export default class Vote extends Entity {
