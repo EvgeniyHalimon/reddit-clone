@@ -1,4 +1,5 @@
 import { CustomError } from "../../shared/CustomError"
+import { ERROR_TITLE } from "../../shared/constants"
 import Comment from "../comment/comment.entity"
 import { commentRepository } from "../comment/comment.repository"
 import { subsRepository } from "../subs/subs.repository"
@@ -9,16 +10,17 @@ import { IPostQueries } from "./types"
 const postsService = {
     create: async (queries) => {
         if (queries.title.trim() === '') {
-            throw new CustomError({ message: 'Title must not be empty', status: 400 })
+            throw new CustomError({ message: ERROR_TITLE, status: 400 })
         }
-            // find sub
+        // find sub
         const subRecord = await subsRepository.findSubOfFail(queries.sub)
         
         const post = new Post({ 
             title: queries.title, 
             body: queries.body, 
             user: queries.user, 
-            sub: subRecord })
+            sub: subRecord 
+        })
         await post.save()
     },
     getAll: async (queries) => {

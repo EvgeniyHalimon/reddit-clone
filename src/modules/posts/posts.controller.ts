@@ -56,11 +56,10 @@ const getPost = async (req: Request, res: Response) => {
 
 const commentOnPost = async (req: Request, res: Response) => {
   const { identifier, slug } = req.params
-  const body = req.body.body
   const queries = {
     identifier: identifier,
     slug: slug,
-    body: body,
+    body: req.body.body,
     user: res.locals.user,
   }
   try {
@@ -76,7 +75,6 @@ const getPostComments = async (req: Request, res: Response) => {
   const { identifier, slug } = req.params
   try {
     const comments = await postsService.getComments(identifier, slug, res.locals.user)
-
     return res.json(comments)
   } catch (err) {
     console.log(err)

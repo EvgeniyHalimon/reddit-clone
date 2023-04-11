@@ -1,29 +1,20 @@
 import { NextFunction, Request, Response, Router } from 'express'
-import { isEmpty } from 'class-validator'
-import { getRepository } from 'typeorm'
 import multer, { FileFilterCallback } from 'multer'
 import path from 'path'
-import fs from 'fs'
 
-import User from '../users/users.entity'
-import Sub from './subs.entity'
 import auth from '../../shared/middleware/auth'
 import user from '../../shared/middleware/user'
-import { makeId } from '../../utils/helpers'
-import { postsRepository } from '../posts/posts.repository'
-import { subsRepository } from './subs.repository'
+import { makeId } from '../../shared/utils/helpers'
 import subsService from './subs.service'
 
 const createSub = async (req: Request, res: Response) => {
   const { name, title, description } = req.body
 
-  const user: User = res.locals.user
-
   const queries = {
     name: name,
     title: title,
     description: description,
-    user: user
+    user: res.locals.user
   }
 
   try {
@@ -36,10 +27,8 @@ const createSub = async (req: Request, res: Response) => {
 }
 
 const getSub = async (req: Request, res: Response) => {
-  const name = req.params.name
-
   try {
-    const sub = await subsService.get(name, res.locals.user)
+    const sub = await subsService.get(req.params.name, res.locals.user)
     return res.json(sub)
   } catch (err) {
     console.log(err)
@@ -50,7 +39,6 @@ const getSub = async (req: Request, res: Response) => {
 const ownSub = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const sub = await subsService.ownSub(res.locals.user, req.params.name)
-
     res.locals.sub = sub
     return next()
   } catch (err) {

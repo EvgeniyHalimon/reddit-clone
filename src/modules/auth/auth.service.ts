@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import User from "../users/users.entity"
 import { userRepository } from "./auth.repository"
 import { CustomError } from "../../shared/CustomError"
+import { ERROR_EMAIL, ERROR_USERNAME, ERROR_PASSWORD } from "../../shared/constants"
 
 const mapErrors = (errors: Object[]) => {
     return errors.reduce((prev: any, err: any) => {
@@ -18,8 +19,8 @@ const authService = {
         const emailUser = await userRepository.findEmail(email)
         const usernameUser = await userRepository.findUsername(username)
     
-        if (emailUser) errors.email = 'Email is already taken'
-        if (usernameUser) errors.username = 'Username is already taken'
+        if (emailUser) errors.email = ERROR_EMAIL
+        if (usernameUser) errors.username = ERROR_USERNAME
     
         if (Object.keys(errors).length > 0) {
           return errors
@@ -39,8 +40,8 @@ const authService = {
     login: async (username, password) => {
         let errors: any = {}
 
-        if (isEmpty(username)) errors.username = 'Username must not be empty'
-        if (isEmpty(password)) errors.password = 'Password must not be empty'
+        if (isEmpty(username)) errors.username = ERROR_USERNAME
+        if (isEmpty(password)) errors.password = ERROR_PASSWORD
         if (Object.keys(errors).length > 0) {
           return errors
         }

@@ -10,6 +10,7 @@ import Vote from "../vote/vote.entity"
 import { voteRepository } from "../vote/vote.repository"
 import Sub from "../subs/subs.entity"
 import Post from "../posts/posts.entity"
+import { LIMIT_OF_TOP_SUBS } from "../../shared/constants"
 
 dotenv.config()
 
@@ -82,7 +83,7 @@ const miscService = {
         .leftJoin(Post, 'p', `s.name = p."subName"`)
         .groupBy('s.title, s.name, "imageUrl"')
         .orderBy(`"postCount"`, 'DESC')
-        .limit(5)
+        .limit(LIMIT_OF_TOP_SUBS)
         .execute()
       return subs
     },

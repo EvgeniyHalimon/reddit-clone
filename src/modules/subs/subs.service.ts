@@ -1,37 +1,38 @@
 import { isEmpty } from "class-validator"
 import { getRepository } from "typeorm"
-import path from 'path'
 import fs from 'fs'
+
 import Sub from "./subs.entity"
 import { subsRepository } from "./subs.repository"
 import { postsRepository } from "../posts/posts.repository"
 import { CustomError } from "../../shared/CustomError"
+import { ERROR_NAME, ERROR_SUB, ERROR_TITLE } from "../../shared/constants"
 
 const subsService = {
     create: async (queries) => {
-        let errors: any = {}
-        if (isEmpty(queries.name)) errors.name = 'Name must not be empty'
-        if (isEmpty(queries.title)) errors.title = 'Title must not be empty'
-    
-        const sub = await getRepository(Sub)
-          .createQueryBuilder('sub')
-          .where('lower(sub.name) = :name', { name: queries.name.toLowerCase() })
-          .getOne()
-    
-        if (sub) errors.name = 'Sub exists already'
-        if (Object.keys(errors).length > 0) {
-          throw errors
-        }
-        
-        const newSub = new Sub({ 
-            name: queries.name, 
-            description: queries.description, 
-            title: queries.title, 
-            user: queries.user 
-        })
-        await newSub.save()
-    
-        return newSub
+      let errors: any = {}
+      if (isEmpty(queries.name)) errors.name = ERROR_NAME
+      if (isEmpty(queries.title)) errors.title = ERROR_TITLE
+  
+      const sub = await getRepository(Sub)
+        .createQueryBuilder('sub')
+        .where('lower(sub.name) = :name', { name: queries.name.toLowerCase() })
+        .getOne()
+  
+      if (sub) errors.name = ERROR_SUB
+      if (Object.keys(errors).length > 0) {
+        throw errors
+      }
+      
+      const newSub = new Sub({ 
+          name: queries.name, 
+          description: queries.description, 
+          title: queries.title, 
+          user: queries.user 
+      })
+      await newSub.save()
+  
+      return newSub
     },
     get: async (name, user) => {
         const sub = await subsRepository.findSubOfFail(name)
@@ -47,7 +48,7 @@ const subsService = {
     },
     search: async (name) => {
         if (isEmpty(name)) {
-            throw new CustomError({message : 'Name must not be empty', status: 400 })
+            throw new CustomError({message : ERROR_NAME, status: 400 })
         }
         const subs = await getRepository(Sub)
             .createQueryBuilder()
@@ -71,7 +72,7 @@ const subsService = {
     upload: async (queries) => {
         if (queries.type !== 'image' && queries.type !== 'banner') {
             fs.unlinkSync(queries.path!)
-            throw new CustomError({message : 'Invalid type', status: 400 })
+            throw new CustomError({message: 'Invalid type', status: 400 })
         }
       
         let oldImageUrn: string = ''

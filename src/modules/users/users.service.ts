@@ -25,9 +25,10 @@ const usersService = {
         )
 
         submissions.sort((a, b) => {
-          if (b.createdAt > a.createdAt) return 1
+          /* if (b.createdAt > a.createdAt) return 1
           if (b.createdAt < a.createdAt) return -1
-          return 0
+          return 0 */
+          return a.createdAt.localeCompare(b.createdAt);
         })
 
         return { user, submissions }

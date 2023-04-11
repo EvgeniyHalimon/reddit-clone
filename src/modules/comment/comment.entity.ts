@@ -12,7 +12,7 @@ import Entity from '../Base-entity/Entity'
 import Post from '../posts/posts.entity'
 import User from '../users/users.entity'
 
-import { makeId } from '../../utils/helpers'
+import { makeId } from '../../shared/utils/helpers'
 import Vote from '../vote/vote.entity'
 import { Exclude, Expose } from 'class-transformer'
 
