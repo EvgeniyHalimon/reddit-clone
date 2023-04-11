@@ -34,7 +34,8 @@ const Login = () => {
             usernameRef.current.value = ''
             passwordRef.current.value = ''
         } catch (err) {
-            setErrors(err.response.data)
+            console.log("🚀 ~ file: login.tsx:37 ~ submitForm ~ err:", err)
+            setErrors(err?.response?.data)
         }
     }
 

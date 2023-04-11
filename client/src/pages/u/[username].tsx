@@ -10,6 +10,7 @@ import Image from 'next/image'
 const User = () => {
   const router = useRouter()
   const username = router.query.username
+  console.log("🚀 ~ file: [username].tsx:13 ~ User ~ username:", username)
 
   const { data, error } = useSWR<any>(username ? `/users/${username}` : null)
   if (error) router.push('/')
@@ -19,12 +20,12 @@ const User = () => {
   return (
     <>
       <Head>
-        <title>{data?.user.username}</title>
+        <title>{data?.user?.username}</title>
       </Head>
       {data && (
         <div className="container flex pt-5">
           <div className="w-160">
-            {data.submissions.map((submission: any) => {
+            {data?.submissions?.map((submission: any) => {
               if (submission.type === 'Post') {
                 const post: Post = submission
                 return <PostCard key={post.identifier} post={post} />

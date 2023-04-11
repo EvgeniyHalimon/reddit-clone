@@ -1,5 +1,4 @@
 import classNames from 'classnames'
-import { MutableRefObject } from 'react'
 import ErrorMessage from './ErrorMessage'
 
 interface InputGroupProps {
