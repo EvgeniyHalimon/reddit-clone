@@ -5,9 +5,10 @@ import jwt from 'jsonwebtoken'
 import cookie from 'cookie'
 
 import User from '../users/users.entity'
-import auth from '../../middleware/auth'
-import user from '../../middleware/user'
+import auth from '../../shared/middleware/auth'
+import user from '../../shared/middleware/user'
 import { userRepository } from './auth.repository'
+import authService from './auth.service'
 
 const mapErrors = (errors: Object[]) => {
   return errors.reduce((prev: any, err: any) => {
@@ -20,28 +21,7 @@ const register = async (req: Request, res: Response) => {
   const { email, username, password } = req.body
 
   try {
-    // Validate data
-    let errors: any = {}
-    const emailUser = await userRepository.findEmail(email)
-    const usernameUser = await userRepository.findUsername(username)
-
-    if (emailUser) errors.email = 'Email is already taken'
-    if (usernameUser) errors.username = 'Username is already taken'
-
-    if (Object.keys(errors).length > 0) {
-      return res.status(400).json(errors)
-    }
-
-    // Create the user
-    const user = new User({ email, username, password })
-
-    errors = await validate(user)
-    if (errors.length > 0) {
-      return res.status(400).json(mapErrors(errors))
-    }
-
-    await user.save()
-
+    const user = authService.register(email, username, password)
     // Return the user
     return res.json(user)
   } catch (err) {
@@ -54,23 +34,7 @@ const login = async (req: Request, res: Response) => {
   const { username, password } = req.body
 
   try {
-    let errors: any = {}
-
-    if (isEmpty(username)) errors.username = 'Username must not be empty'
-    if (isEmpty(password)) errors.password = 'Password must not be empty'
-    if (Object.keys(errors).length > 0) {
-      return res.status(400).json(errors)
-    }
-
-    const user = await userRepository.findUsername(username)
-
-    if (!user) return res.status(404).json({ username: 'User not found' })
-
-    const passwordMatches = await bcrypt.compare(password, user.password)
-
-    if (!passwordMatches) {
-      return res.status(401).json({ password: 'Password is incorrect' })
-    }
+    const user = authService.login(username, password)
 
     const token = jwt.sign({ username }, process.env.JWT_SECRET!)
 
@@ -84,7 +48,7 @@ const login = async (req: Request, res: Response) => {
         path: '/',
       })
     )
-
+    
     return res.json(user)
   } catch (err) {
     console.log(err)

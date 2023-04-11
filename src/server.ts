@@ -8,13 +8,13 @@ import cors from 'cors'
 
 dotenv.config()
 
-import authRoutes from './modules/auth/auth'
-import postRoutes from './modules/posts/posts'
-import subRoutes from './modules/subs/subs'
-import miscRoutes from './modules/misc/misc'
-import userRoutes from './modules/users/users'
+import authRoutes from './modules/auth/auth.controller'
+import postRoutes from './modules/posts/posts.controller'
+import subRoutes from './modules/subs/subs.controller'
+import miscRoutes from './modules/misc/misc.controller'
+import userRoutes from './modules/users/users.controller'
 
-import trim from './middleware/trim'
+import trim from './shared/middleware/trim'
 
 const app = express()
 const PORT = process.env.PORT

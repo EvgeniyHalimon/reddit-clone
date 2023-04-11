@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
-import User from '../modules/users/users.entity'
-import { userRepository } from '../modules/auth/auth.repository'
+import { userRepository } from '../../modules/auth/auth.repository'
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {
