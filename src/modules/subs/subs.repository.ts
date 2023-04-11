@@ -1,4 +1,4 @@
-import Sub from "./subs.entity";
+import Sub from "../../entities/Sub";
 
 const subsRepository = {
   findSubOfFail: async (name: string) => {

@@ -1,9 +1,9 @@
 import { CustomError } from "../../shared/CustomError"
 import { ERROR_TITLE } from "../../shared/constants"
-import Comment from "../comment/comment.entity"
+import Comment from "../../entities/Comment"
 import { commentRepository } from "../comment/comment.repository"
 import { subsRepository } from "../subs/subs.repository"
-import Post from "./posts.entity"
+import Post from "../../entities/Post"
 import { postsRepository } from "./posts.repository"
 import { IPostQueries } from "./types"
 
@@ -25,10 +25,12 @@ const postsService = {
     },
     getAll: async (queries) => {
         const posts = await postsRepository.getAllPosts(queries.currentPage, queries.postsPerPage)
+        console.log("🚀 ~ file: posts.service.ts:28 ~ getAll: ~ posts:", posts)
 
         if (queries.user) {
           posts.forEach((p) => p.setUserVote(queries.user))
         }
+        return posts
     },
     get: async (queries) => {
         const postQueries : IPostQueries = {

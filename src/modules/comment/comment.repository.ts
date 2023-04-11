@@ -1,6 +1,6 @@
-import Comment from "./comment.entity";
-import Post from "../posts/posts.entity";
-import User from "../users/users.entity";
+import Comment from "../../entities/Comment";
+import Post from "../../entities/Post";
+import User from "../../entities/User";
 
 const commentRepository = {
   getCommentsForPost: async (post: Post) => {

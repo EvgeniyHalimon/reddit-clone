@@ -1,6 +1,6 @@
-import Post from "./posts.entity";
-import Sub from "../subs/subs.entity";
-import User from "../users/users.entity";
+import Post from "../../entities/Post";
+import Sub from "../../entities/Sub";
+import User from "../../entities/User";
 import { IPostQueries } from "./types";
 
 const postsRepository = {

@@ -2,14 +2,14 @@ import { getConnection } from "typeorm"
 import dotenv from 'dotenv'
 
 import { CustomError } from "../../shared/CustomError"
-import Comment from "../comment/comment.entity"
+import Comment from "../../entities/Comment"
 import { commentRepository } from "../comment/comment.repository"
 import { postsRepository } from "../posts/posts.repository"
 import { IPostQueries } from "../posts/types"
-import Vote from "../vote/vote.entity"
+import Vote from "../../entities/Vote"
 import { voteRepository } from "../vote/vote.repository"
-import Sub from "../subs/subs.entity"
-import Post from "../posts/posts.entity"
+import Sub from "../../entities/Sub"
+import Post from "../../entities/Post"
 import { LIMIT_OF_TOP_SUBS } from "../../shared/constants"
 
 dotenv.config()

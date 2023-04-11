@@ -1,7 +1,7 @@
-import Comment from "../comment/comment.entity";
-import Post from "../posts/posts.entity";
-import User from "../users/users.entity";
-import Vote from "./vote.entity";
+import Comment from "../../entities/Comment";
+import Post from "../../entities/Post";
+import User from "../../entities/User";
+import Vote from "../../entities/Vote";
 
 const voteRepository = {
   findVoteByComment: async (user: User, comment: Comment) => {

@@ -7,9 +7,9 @@ import {
   OneToMany,
 } from 'typeorm'
 
-import Entity from '../Base-entity/Entity'
-import User from '../users/users.entity'
-import Post from '../posts/posts.entity'
+import Entity from './Entity'
+import User from './User'
+import Post from './Post'
 import { Expose } from 'class-transformer'
 import dotenv from 'dotenv'
 dotenv.config()

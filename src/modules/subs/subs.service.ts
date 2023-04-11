@@ -2,7 +2,7 @@ import { isEmpty } from "class-validator"
 import { getRepository } from "typeorm"
 import fs from 'fs'
 
-import Sub from "./subs.entity"
+import Sub from "../../entities/Sub"
 import { subsRepository } from "./subs.repository"
 import { postsRepository } from "../posts/posts.repository"
 import { CustomError } from "../../shared/CustomError"

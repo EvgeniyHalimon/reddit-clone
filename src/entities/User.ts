@@ -9,9 +9,9 @@ import {
 import bcrypt from 'bcrypt'
 import { Exclude } from 'class-transformer'
 
-import Entity from '../Base-entity/Entity'
-import Post from '../posts/posts.entity'
-import Vote from '../vote/vote.entity'
+import Entity from './Entity'
+import Post from './Post'
+import Vote from './Vote'
 
 @TOEntity('users')
 export default class User extends Entity {

@@ -1,6 +1,6 @@
 import { isEmpty, validate } from "class-validator"
 import bcrypt from 'bcrypt'
-import User from "../users/users.entity"
+import User from "../../entities/User"
 import { userRepository } from "./auth.repository"
 import { CustomError } from "../../shared/CustomError"
 import { ERROR_EMAIL, ERROR_USERNAME, ERROR_PASSWORD } from "../../shared/constants"

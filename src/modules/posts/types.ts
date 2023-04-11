@@ -1,4 +1,4 @@
-import Post from "./posts.entity";
+import Post from "../../entities/Post";
 
 export interface IPostQueries{
     identifier: string,

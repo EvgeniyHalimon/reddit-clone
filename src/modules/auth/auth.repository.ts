@@ -1,4 +1,4 @@
-import User from "../users/users.entity";
+import User from "../../entities/User";
 
 const userRepository = {
   findUsername: async (username: string) => {

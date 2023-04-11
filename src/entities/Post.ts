@@ -10,12 +10,12 @@ import {
 } from 'typeorm'
 import { Exclude, Expose } from 'class-transformer'
 
-import Entity from '../Base-entity/Entity'
-import User from '../users/users.entity'
-import { makeId, slugify } from '../../shared/utils/helpers'
-import Sub from '../subs/subs.entity'
-import Comment from '../comment/comment.entity'
-import Vote from '../vote/vote.entity'
+import Entity from './Entity'
+import User from './User'
+import { makeId, slugify } from '../shared/utils/helpers'
+import Sub from './Sub'
+import Comment from './Comment'
+import Vote from './Vote'
 
 @TOEntity('posts')
 export default class Post extends Entity {
