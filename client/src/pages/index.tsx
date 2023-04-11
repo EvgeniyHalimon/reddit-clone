@@ -21,7 +21,6 @@ const metaTitle = 'Floppedit: the front page of the internet'
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const posts = await Axios.get<Post[]>('/posts')
-    console.log("🚀 ~ file: index.tsx:18 ~ constgetServerSideProps:GetServerSideProps= ~ posts:", posts.data)
     
     //!TODO find solution
     const topSubs = await Axios.get<Sub[]>('/misc/top-subs')

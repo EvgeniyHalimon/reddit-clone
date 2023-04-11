@@ -1,20 +1,23 @@
 import classNames from 'classnames'
 import ErrorMessage from './ErrorMessage'
+import { memo } from 'react'
 
 interface InputGroupProps {
     className?: string
     type: string
     placeholder: string
-    refs: any
+    value: string
     error: string | undefined
+    setValue: (str: string) => void
 }
 
 const UniversalInput: React.FC<InputGroupProps> = ({
     className,
     type,
     placeholder,
-    refs,
+    value,
     error,
+    setValue
     }) => {
     return (
         <div className={className}>
@@ -25,11 +28,12 @@ const UniversalInput: React.FC<InputGroupProps> = ({
                 { 'border-red-500': error }
                 )}
                 placeholder={placeholder}
-                ref={refs}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
             />
            <ErrorMessage error={error}/>
         </div>
     )
 }
 
-export default UniversalInput
+export default memo(UniversalInput)

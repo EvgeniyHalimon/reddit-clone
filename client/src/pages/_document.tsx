@@ -28,7 +28,6 @@ class MyDocument extends Document {
                     <meta property='twitter:card' content='website'/>
                     {/* <meta property='og:image' content={process.env.NEXT_PUBLIC_BASE_URL}/> */}
                     <link rel='icon' href="https://play-lh.googleusercontent.com/70v2P2iEq51cg0j6oYMDjVOPOPCGfuYeqJDEn4n27W9BRm-xW-9Pb96k-0Q3c8qPhKUB"/>
-                    <title>{metaSite}</title>
                 </Head>
                 <body className="font-body" style={{backgroundColor : '#DAE0E6'}}>
                     <Main />

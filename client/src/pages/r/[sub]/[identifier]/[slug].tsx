@@ -29,10 +29,12 @@ const PostPage = () => {
   const { data: post, error } = useSWR<Post>(
     identifier && slug ? `/posts/${identifier}/${slug}` : null
   )
+  console.log("🚀 ~ file: [slug].tsx:30 ~ PostPage ~ post:", post)
 
   const { data: comments, mutate } = useSWR<Comment[]>(
     identifier && slug ? `/posts/${identifier}/${slug}/comments` : null
   )
+  console.log("🚀 ~ file: [slug].tsx:34 ~ PostPage ~ comments:", comments)
 
   if (error) router.push('/')
 

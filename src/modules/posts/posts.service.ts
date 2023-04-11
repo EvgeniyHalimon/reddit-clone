@@ -25,7 +25,6 @@ const postsService = {
     },
     getAll: async (queries) => {
         const posts = await postsRepository.getAllPosts(queries.currentPage, queries.postsPerPage)
-        console.log("🚀 ~ file: posts.service.ts:28 ~ getAll: ~ posts:", posts)
 
         if (queries.user) {
           posts.forEach((p) => p.setUserVote(queries.user))
@@ -43,6 +42,7 @@ const postsService = {
         if (queries.user) {
           post.setUserVote(queries.user)
         }
+        return post
     },
     createComment: async (queries) => {
         const post = await postsRepository.findPostOrFail(queries.identifier, queries.slug)
@@ -54,15 +54,19 @@ const postsService = {
         })
     
         await comment.save()
+
+        return post
     },
     getComments: async (identifier, slug, user) => {
         const post = await postsRepository.findPostOrFail(identifier, slug)
 
         const comments = await commentRepository.getCommentsForPost(post)
     
-        if (user) {
+        if(user) {
           comments.forEach((c) => c.setUserVote(user))
         }
+
+        return comments
     }
 }
 

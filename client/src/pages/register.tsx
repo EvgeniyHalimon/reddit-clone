@@ -11,9 +11,9 @@ import SubmitButton from '../components/SubmitButton'
 
 //!TODO: refactor form
 export default function Register() {
-    const emailRef = useRef<HTMLInputElement | null>(null)
-    const usernameRef = useRef<HTMLInputElement | null>(null)
-    const passwordRef = useRef<HTMLInputElement | null>(null)
+    const [email, setEmail] = useState('')
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
     const [agreement, setAgreement] = useState(false)
     const [errors, setErrors] = useState<any>({})
     const router = useRouter()
@@ -32,13 +32,13 @@ export default function Register() {
     
         try {
             await Axios.post('/auth/register', {
-                email: emailRef.current.value,
-                password: passwordRef.current.value,
-                username: usernameRef.current.value,
+                email,
+                password,
+                username,
             })
-            emailRef.current.value = ''
-            passwordRef.current.value = ''
-            usernameRef.current.value = ''
+            setEmail('')
+            setUsername('')
+            setPassword('')
             router.push('/login')
         } catch (err) {
             setErrors(err)
@@ -74,23 +74,26 @@ return (
                     <UniversalInput
                         className="mb-2"
                         type="email"
-                        refs={emailRef}
+                        value={email}
                         placeholder="EMAIL"
                         error={errors.email}
+                        setValue={setEmail}
                     />
                     <UniversalInput
                         className="mb-2"
                         type="text"
-                        refs={usernameRef}
+                        value={username}
                         placeholder="USERNAME"
                         error={errors.username}
+                        setValue={setUsername}
                     />
                     <UniversalInput
                         className="mb-4"
                         type="password"
-                        refs={passwordRef}
+                        value={password}
                         placeholder="PASSWORD"
                         error={errors.password}
+                        setValue={setPassword}
                     />
                     <SubmitButton buttonText="Sign Up"/>
                 </form>

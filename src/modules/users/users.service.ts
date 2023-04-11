@@ -6,8 +6,8 @@ import { postsRepository } from "../posts/posts.repository"
 const usersService = {
     getSubmissions: async (username, localUser) => {
         const user = await userRepository.findUserOrFail(username, ['username', 'createdAt'])
-        if (user) {
-            throw new CustomError({ message: 'User not found', status: 404 })
+        if (!user) {
+          throw new CustomError({ message: 'User not found', status: 404 })
         }
         const posts = await postsRepository.findUserPosts(user)
 
@@ -25,10 +25,9 @@ const usersService = {
         )
 
         submissions.sort((a, b) => {
-          /* if (b.createdAt > a.createdAt) return 1
+          if (b.createdAt > a.createdAt) return 1
           if (b.createdAt < a.createdAt) return -1
-          return 0 */
-          return a.createdAt.localeCompare(b.createdAt);
+          return 0 
         })
 
         return { user, submissions }

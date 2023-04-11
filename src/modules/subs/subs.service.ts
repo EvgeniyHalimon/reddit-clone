@@ -48,7 +48,7 @@ const subsService = {
     },
     search: async (name) => {
         if (isEmpty(name)) {
-            throw new CustomError({message : ERROR_NAME, status: 400 })
+          throw new CustomError({message : ERROR_NAME, status: 400 })
         }
         const subs = await getRepository(Sub)
             .createQueryBuilder()
@@ -71,8 +71,8 @@ const subsService = {
     },
     upload: async (queries) => {
         if (queries.type !== 'image' && queries.type !== 'banner') {
-            fs.unlinkSync(queries.path!)
-            throw new CustomError({message: 'Invalid type', status: 400 })
+          fs.unlinkSync(queries.path!)
+          throw new CustomError({message: 'Invalid type', status: 400 })
         }
       
         let oldImageUrn: string = ''

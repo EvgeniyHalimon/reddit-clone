@@ -26,6 +26,7 @@ const login = async (req: Request, res: Response) => {
     const user = authService.login(username, password)
 
     const token = jwt.sign({ username }, process.env.JWT_SECRET!)
+    console.log("🚀 ~ file: auth.controller.ts:30 ~ login ~ token:", token)
 
     res.set(
       'Set-Cookie',

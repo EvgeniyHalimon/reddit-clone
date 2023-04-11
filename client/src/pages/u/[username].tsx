@@ -20,7 +20,7 @@ const User = () => {
   return (
     <>
       <Head>
-        <title>{data?.user?.username}</title>
+        <title>{username}</title>
       </Head>
       {data && (
         <div className="container flex pt-5">

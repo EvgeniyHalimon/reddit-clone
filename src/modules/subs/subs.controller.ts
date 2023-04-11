@@ -81,7 +81,7 @@ const uploadSubImage = async (req: Request, res: Response) => {
 
 const searchSubs = async (req: Request, res: Response) => {
   try {
-    const subs = subsService.search(req.params.name)
+    const subs = await subsService.search(req.params.name)
     return res.json(subs)
   } catch (err) {
     console.log(err)

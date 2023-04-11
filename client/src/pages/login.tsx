@@ -10,15 +10,14 @@ import SubmitButton from "../components/SubmitButton"
 
 //!TODO: refactor form
 const Login = () => {
-    const usernameRef = useRef<HTMLInputElement | null>(null)
-    const passwordRef = useRef<HTMLInputElement | null>(null)
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
     const [errors, setErrors] = useState<any>({})
 
     const dispatch = useAuthDispatch()
     const {authenticated} = useAuthState()
     
     const router = useRouter()
-    console.log("🚀 ~ file: login.tsx:19 ~ Login ~ router:", usernameRef, passwordRef)
     if(authenticated) router.push("/")
     
     const submitForm = async (event: FormEvent) => {
@@ -26,13 +25,12 @@ const Login = () => {
         
         try {
             const res = await Axios.post('/auth/login',{
-                username: usernameRef.current.value,
-                password: passwordRef.current.value,
+                username,
+                password,
             })
+            console.log("🚀 ~ file: login.tsx:31 ~ submitForm ~ res:", res)
             dispatch('LOGIN',res.data)
-            router.push("/")
-            usernameRef.current.value = ''
-            passwordRef.current.value = ''
+            if(res.status === 200) router.push("/")
         } catch (err) {
             console.log("🚀 ~ file: login.tsx:37 ~ submitForm ~ err:", err)
             setErrors(err?.response?.data)
@@ -52,16 +50,18 @@ return (
                     <UniversalInput
                         className="mb-2"
                         type="text"
-                        refs={usernameRef}
+                        value={username}
                         placeholder="USERNAME"
-                        error={errors.username}
+                        error={errors?.username}
+                        setValue={setUsername}
                     />
                     <UniversalInput
                         className="mb-4"
                         type="password"
-                        refs={passwordRef}
+                        value={password}
                         placeholder="PASSWORD"
-                        error={errors.password}
+                        error={errors?.password}
+                        setValue={setPassword}
                     />
                     <SubmitButton buttonText="Log in"/>
                 </form>
