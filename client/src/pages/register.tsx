@@ -1,4 +1,4 @@
-import { FormEvent, useRef, useState } from 'react'
+import { FormEvent, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Axios from 'axios'
@@ -6,46 +6,58 @@ import { useRouter } from 'next/router'
 import UniversalInput from '../components/UniversalInput'
 import { useAuthState } from '../context/auth'
 import AuthBackground from '../components/AuthBackground'
-import ErrorMessage from '../components/ErrorMessage'
 import SubmitButton from '../components/SubmitButton'
+import * as yup from 'yup'
+import { Field, useFormik, ErrorMessage} from 'formik'
+
+
+const validationSchema = yup.object({
+    username: yup
+    .string()
+    .trim()
+    .min(2, 'Username should be of mimnimum 2 characters')
+    .required('Username is required'),
+  email: yup
+    .string()
+    .trim()
+    .email('Enter a valid email')
+    .required('Email is required'),
+  password: yup
+    .string()
+    .trim()
+    .min(6, 'Password should be of minimum 8 characters length')
+    .required('Password is required'),
+  agreement: yup.bool()
+    .oneOf([true], "You must accept the terms and conditions")
+  });
 
 //!TODO: refactor form
 export default function Register() {
-    const [email, setEmail] = useState('')
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [agreement, setAgreement] = useState(false)
-    const [errors, setErrors] = useState<any>({})
     const router = useRouter()
 
     const {authenticated} = useAuthState()
 
     if(authenticated) router.push("/")
-
-    const submitForm = async (event: FormEvent) => {
-        event.preventDefault()
     
-        if (!agreement) {
-            setErrors({ ...errors, agreement: 'You must agree to T&Cs' })
-            return
-        }
-    
-        try {
-            await Axios.post('/auth/register', {
-                email,
-                password,
-                username,
+    const formik = useFormik({
+        initialValues: {
+            username: '',
+            password: '',
+            email: '',
+            agreement: false
+        },
+        validationSchema: validationSchema,
+        onSubmit: async (values) => {
+            const res = await Axios.post('/auth/register',{
+                username: values.username,
+                password: values.password,
+                email: values.email,
             })
-            setEmail('')
-            setUsername('')
-            setPassword('')
-            router.push('/login')
-        } catch (err) {
-            setErrors(err)
-        }
-    }
+            if(res.status === 200) router.push("/login")
+        },
+      });
 
-return (
+    return (
     <div className="flex bg-white">
         <Head>
             <title>Register</title>
@@ -57,43 +69,45 @@ return (
                 <p className="mb-10 text-xs">
                     By continuing, you agree to our User Agreement and Privacy Policy
                 </p>
-                <form onSubmit={submitForm}>
+                <form  onSubmit={formik.handleSubmit}>
                     <div className="mb-6">
-                        <input
-                            type="checkbox"
-                            className="mr-1 cursor-pointer"
-                            id="agreement"
-                            checked={agreement}
-                            onChange={(e) => setAgreement(e.target.checked)}
-                        />
-                        <label htmlFor="agreement" className="text-xs cursor-pointer">
-                            I agree to get emails about cool stuff on Floppedit
-                        </label>
-                        <ErrorMessage error={errors.agreement}/>
+                        <input type="checkbox" name="agreement" id="agreement" checked={formik.values.agreement} onChange={formik.handleChange}/>
+                        <label className='ml-1' htmlFor="agreement" >I agree to the Terms and Conditions</label>
+                        {Boolean(formik.touched.agreement) && formik.errors.agreement && (
+                        <div className="text-rose-700">{formik.errors.agreement}</div>)}
                     </div>
-                    <UniversalInput
-                        className="mb-2"
-                        type="email"
-                        value={email}
-                        placeholder="EMAIL"
-                        error={errors.email}
-                        setValue={setEmail}
+                    <UniversalInput 
+                        className="mb-4" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Email" 
+                        type="email" 
+                        onChange={formik.handleChange} 
+                        value={formik.values.email} 
+                        error={Boolean(formik.touched.email)} 
+                        helperText={formik.errors.email}                
                     />
-                    <UniversalInput
-                        className="mb-2"
-                        type="text"
-                        value={username}
-                        placeholder="USERNAME"
-                        error={errors.username}
-                        setValue={setUsername}
+                    <UniversalInput 
+                        className="mb-4" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Username" 
+                        type="text" 
+                        onChange={formik.handleChange} 
+                        value={formik.values.username} 
+                        error={Boolean(formik.touched.username)} 
+                        helperText={formik.errors.username}                
                     />
-                    <UniversalInput
-                        className="mb-4"
-                        type="password"
-                        value={password}
-                        placeholder="PASSWORD"
-                        error={errors.password}
-                        setValue={setPassword}
+                    <UniversalInput 
+                        className="mb-4" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Password" 
+                        type="password" 
+                        onChange={formik.handleChange} 
+                        value={formik.values.password} 
+                        error={Boolean(formik.touched.password)} 
+                        helperText={formik.errors.password}                
                     />
                     <SubmitButton buttonText="Sign Up"/>
                 </form>

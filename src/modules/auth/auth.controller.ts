@@ -5,6 +5,9 @@ import cookie from 'cookie'
 import auth from '../../shared/middleware/auth'
 import user from '../../shared/middleware/user'
 import authService from './auth.service'
+import { validate } from 'express-validation'
+import { loginSchema } from './validators/loginSchema'
+import { registerSchema } from './validators/registerScheme'
 
 const register = async (req: Request, res: Response) => {
   const { email, username, password } = req.body
@@ -21,24 +24,23 @@ const register = async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
   const { username, password } = req.body
+  console.log("🚀 ~ file: auth.controller.ts:27 ~ login ~ req.body:", req.body)
 
   try {
     const user = authService.login(username, password)
-
-    const token = jwt.sign({ username }, process.env.JWT_SECRET!)
-    console.log("🚀 ~ file: auth.controller.ts:30 ~ login ~ token:", token)
-
-    res.set(
-      'Set-Cookie',
-      cookie.serialize('token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 3600,
-        path: '/',
-      })
-    )
-    
+    if(user){
+      const token = jwt.sign({ username }, process.env.JWT_SECRET!)
+      res.set(
+        'Set-Cookie',
+        cookie.serialize('token', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 3600,
+          path: '/',
+        })
+      )
+    }
     return res.json(user)
   } catch (err) {
     console.log(err)
@@ -66,8 +68,8 @@ const logout = (_: Request, res: Response) => {
 }
 
 const router = Router()
-router.post('/register', register)
-router.post('/login', login)
+router.post('/register', validate(registerSchema, {}, {}), register)
+router.post('/login', validate(loginSchema, {}, {}), login)
 router.get('/me', user, auth, me)
 router.get('/logout', user, auth, logout)
 

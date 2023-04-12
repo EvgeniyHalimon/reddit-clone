@@ -28,6 +28,7 @@
       "cors": "^2.8.5",
       "dotenv": "^16.0.0",
       "express": "^4.17.2",
+      "express-validation": "^4.1.0",
       "jsonwebtoken": "^8.5.1",
       "morgan": "^1.10.0",
       "multer": "^1.4.4",
@@ -37,9 +38,9 @@
       "typeorm-seeding": "^1.6.1"
    },
    "scripts": {
-      "start": "ts-node src/server.ts",
+      "start": "ts-node --delay 500ms src/server.ts",
       "typeorm": "ts-node ./node_modules/typeorm/cli.js",
-      "server": "nodemon --exec ts-node src/server.ts",
+      "server": "nodemon --delay 500ms  --exec ts-node src/server.ts",
       "client": "cd client && npm run dev",
       "dev": "concurrently \"npm run server\" \"npm run client\" -n server,client",
       "seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
