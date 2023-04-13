@@ -3,14 +3,16 @@ import { Router, Request, Response } from 'express'
 import auth from '../../shared/middleware/auth'
 import user from '../../shared/middleware/user'
 import postsService from './posts.service'
+import { CustomRequest } from '../../shared/types'
 
-const createPost = async (req: Request, res: Response) => {
+
+const createPost = async (req: CustomRequest, res: Response) => {
   const { title, body, sub } = req.body
   const queries = {
     title: title,
     body: body,
     sub: sub,
-    user: res.locals.user
+    user: req.user
   }
   try {
     const post = await postsService.create(queries)
@@ -21,13 +23,13 @@ const createPost = async (req: Request, res: Response) => {
   }
 }
 
-const getPosts = async (req: Request, res: Response) => {
+const getPosts = async (req: CustomRequest, res: Response) => {
   const currentPage: number = (req.query.page || 0)  as number
   const postsPerPage: number = (req.query.count || 8) as number
   const queries = {
     currentPage: currentPage,
     postsPerPage: postsPerPage,
-    user: res.locals.user,
+    user: req.user,
   }
   try {
     const posts = await postsService.getAll(queries)
@@ -38,13 +40,13 @@ const getPosts = async (req: Request, res: Response) => {
   }
 }
 
-const getPost = async (req: Request, res: Response) => {
+const getPost = async (req: CustomRequest, res: Response) => {
   const { identifier, slug } = req.params
   try {
     const queries = {
       identifier: identifier,
       slug: slug,
-      user: res.locals.user,
+      user: req.user,
     }
     const post = await postsService.get(queries)
     return res.json(post)
@@ -54,13 +56,13 @@ const getPost = async (req: Request, res: Response) => {
   }
 }
 
-const commentOnPost = async (req: Request, res: Response) => {
+const commentOnPost = async (req: CustomRequest, res: Response) => {
   const { identifier, slug } = req.params
   const queries = {
     identifier: identifier,
     slug: slug,
     body: req.body.body,
-    user: res.locals.user,
+    user: req.user,
   }
   try {
     const comment = await postsService.createComment(queries)
@@ -71,10 +73,10 @@ const commentOnPost = async (req: Request, res: Response) => {
   }
 }
 
-const getPostComments = async (req: Request, res: Response) => {
+const getPostComments = async (req: CustomRequest, res: Response) => {
   const { identifier, slug } = req.params
   try {
-    const comments = await postsService.getComments(identifier, slug, res.locals.user)
+    const comments = await postsService.getComments(identifier, slug, req.user)
     return res.json(comments)
   } catch (err) {
     console.log(err)

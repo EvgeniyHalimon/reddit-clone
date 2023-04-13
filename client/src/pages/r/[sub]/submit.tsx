@@ -87,7 +87,7 @@ const Submit = () => {
 
   export default Submit
   
-  export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  /* export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     try {
       const cookie = req.headers.cookie
       if (!cookie) throw new Error('Missing auth token cookie')
@@ -98,4 +98,4 @@ const Submit = () => {
     } catch (err) {
       res.writeHead(307, { Location: '/login' }).end()
     }
-  }
+  } */

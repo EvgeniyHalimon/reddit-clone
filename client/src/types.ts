@@ -42,10 +42,15 @@ export interface Post {
     identifier: string
     body: string
     username: string
-    createdAt: string
-    updatedAt: string
+    createdAt: string | Date
+    updatedAt: string | Date
     post?: Post
     // Virtuals
     userVote: number
     voteScore: number
   }
+
+export interface ITokens{
+    accessToken: string,
+    refreshToken: string,
+}

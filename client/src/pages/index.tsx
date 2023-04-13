@@ -6,11 +6,11 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import PostCard from '../components/PostCard/PostCard';
 import useSWR from 'swr'
 import useSWRInfinite from 'swr/infinite'
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useAuthState } from '../context/auth';
+import { AuthContext } from '../context/auth';
 
 dayjs.extend(relativeTime)
 
@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function Home({ topSubs }) {
   const [observerdPost, setObservedPost] = useState('')
   /* const { data: posts } = useSWR<Post[]>(`/posts?page=0`) */
-  const { authenticated } = useAuthState()
+  const { token } = useContext(AuthContext);
   const { data, error, mutate, size: page, setSize: setPage } = useSWRInfinite((index) => `/posts?page=${index}`)
 
   const posts: Post[] = data ? [].concat(...data) : [];
@@ -60,8 +60,6 @@ export default function Home({ topSubs }) {
       observeElement(document.getElementById(id))
     }
   }, [posts])
-
-  
   
   return (
     <Fragment>
@@ -115,7 +113,7 @@ export default function Home({ topSubs }) {
                 </div>
               ))}
             </div>
-            {authenticated && (
+            {token && (
               <div className="p-4 border-t-2">
                 <Link href="/subs/create">
                   <a className="w-full px-2 py-1 blue button">

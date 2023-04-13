@@ -6,15 +6,16 @@ import auth from '../../shared/middleware/auth'
 import user from '../../shared/middleware/user'
 import { makeId } from '../../shared/utils/helpers'
 import subsService from './subs.service'
+import { CustomRequest } from '../../shared/types'
 
-const createSub = async (req: Request, res: Response) => {
+const createSub = async (req: CustomRequest, res: Response) => {
   const { name, title, description } = req.body
 
   const queries = {
     name: name,
     title: title,
     description: description,
-    user: res.locals.user
+    user: req.user
   }
 
   try {
@@ -26,9 +27,9 @@ const createSub = async (req: Request, res: Response) => {
   }
 }
 
-const getSub = async (req: Request, res: Response) => {
+const getSub = async (req: CustomRequest, res: Response) => {
   try {
-    const sub = await subsService.get(req.params.name, res.locals.user)
+    const sub = await subsService.get(req.params.name, req.user)
     return res.json(sub)
   } catch (err) {
     console.log(err)
@@ -36,10 +37,10 @@ const getSub = async (req: Request, res: Response) => {
   }
 }
 
-const ownSub = async (req: Request, res: Response, next: NextFunction) => {
+const ownSub = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
-    const sub = await subsService.ownSub(res.locals.user, req.params.name)
-    res.locals.sub = sub
+    const sub = await subsService.ownSub(req.user, req.params.name)
+    req.sub = sub
     return next()
   } catch (err) {
     return res.status(500).json({ error: 'Something went wrong' })

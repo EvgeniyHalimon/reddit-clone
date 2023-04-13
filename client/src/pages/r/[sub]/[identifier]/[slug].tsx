@@ -9,8 +9,8 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { Post, Comment } from '../../../../types'
 import Sidebar from '../../../../components/Sidebar'
 import Axios from 'axios'
-import { useAuthState } from '../../../../context/auth'
-import { FormEvent, useState } from 'react'
+import { AuthContext } from '../../../../context/auth'
+import { FormEvent, useContext, useState } from 'react'
 import VoteSection from '../../../../components/PostCard/VoteSection'
 import CommentSection from '../../../../components/PostCard/CommentSection'
 
@@ -20,7 +20,7 @@ const PostPage = () => {
   // Local state
   const [newComment, setNewComment] = useState('')
   // Global state
-  const { authenticated, user } = useAuthState()
+  const { user } = useContext(AuthContext)
 
   // Utils
   const router = useRouter()
@@ -29,18 +29,16 @@ const PostPage = () => {
   const { data: post, error } = useSWR<Post>(
     identifier && slug ? `/posts/${identifier}/${slug}` : null
   )
-  console.log("🚀 ~ file: [slug].tsx:30 ~ PostPage ~ post:", post)
 
   const { data: comments, mutate } = useSWR<Comment[]>(
     identifier && slug ? `/posts/${identifier}/${slug}/comments` : null
   )
-  console.log("🚀 ~ file: [slug].tsx:34 ~ PostPage ~ comments:", comments)
 
   if (error) router.push('/')
 
   const vote = async (value: number, comment?: Comment) => {
     // If not logged in go to login
-    if (!authenticated) router.push('/login')
+    if (!user) router.push('/login')
 
     // If vote is the same reset vote
     if (
@@ -146,7 +144,7 @@ const PostPage = () => {
                 </div>
                 {/* Comment input area */}
                 <div className="pl-10 pr-6 mb-4">
-                  {authenticated ? (
+                  {user ? (
                     <div>
                       <p className="mb-1 text-xs">
                         Comment as{' '}

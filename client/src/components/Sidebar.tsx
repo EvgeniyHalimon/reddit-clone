@@ -1,10 +1,11 @@
 import dayjs from "dayjs"
 import Link from "next/link"
-import { useAuthState } from "../context/auth"
+import { AuthContext } from "../context/auth"
 import { Sub } from "../types"
+import { useContext } from "react"
 
 const Sidebar = ({ sub }: { sub: Sub }) => {
-    const { authenticated } = useAuthState()
+  const { token } = useContext(AuthContext);
 
     //!TODO: update members
 
@@ -30,7 +31,7 @@ const Sidebar = ({ sub }: { sub: Sub }) => {
               <i className="mr-2 fas fa-birthday-cake"></i>
               Created {dayjs(sub.createdAt).format('D MMM YYYY')}
             </p>
-            {authenticated && (
+            {token && (
               <Link href={`/r/${sub.name}/submit`}>
                 <a className="w-full py-1 text-sm blue button">Create Post</a>
               </Link>

@@ -25,6 +25,7 @@ const postsService = {
     },
     getAll: async (queries) => {
         const posts = await postsRepository.getAllPosts(queries.currentPage, queries.postsPerPage)
+        if(posts === null || undefined) throw new CustomError({ message: 'Forbiden', status: 403 })
 
         if (queries.user) {
           posts.forEach((p) => p.setUserVote(queries.user))

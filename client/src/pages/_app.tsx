@@ -2,8 +2,8 @@ import { AppProps } from 'next/app'
 import Axios from 'axios'
 import { useRouter } from 'next/router'
 import { SWRConfig } from 'swr'
+import AuthProvider from '../context/auth'
 
-import { AuthProvider } from '../context/auth'
 
 import '../styles/Tailwind.css'
 import '../styles/icons.css'

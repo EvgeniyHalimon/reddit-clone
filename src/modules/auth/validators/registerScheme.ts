@@ -1,19 +1,15 @@
-import { Joi } from 'express-validation';
+import { body } from 'express-validator';
 
-const registerSchema = {
-  body: Joi.object({
-    email: Joi.string()
-      .email()
-      .regex(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
-      .required(),
-    password: Joi.string()
-      .required()
-      .min(6),
-    username: Joi.string()
-      .required()
-      .min(2)
-      .max(30),
-  }),
-};
+const registerSchema = [
+  body('username')
+    .notEmpty()
+    .withMessage('You forgot to enter username'),
+  body('email')
+    .isEmail()
+    .withMessage('Email must contain a valid email address'),
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters long'),
+];
 
 export { registerSchema };

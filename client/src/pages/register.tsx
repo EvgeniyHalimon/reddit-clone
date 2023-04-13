@@ -1,10 +1,10 @@
-import { FormEvent, useState } from 'react'
+import { useContext } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Axios from 'axios'
 import { useRouter } from 'next/router'
 import UniversalInput from '../components/UniversalInput'
-import { useAuthState } from '../context/auth'
+import { AuthContext } from '../context/auth'
 import AuthBackground from '../components/AuthBackground'
 import SubmitButton from '../components/SubmitButton'
 import * as yup from 'yup'
@@ -35,9 +35,9 @@ const validationSchema = yup.object({
 export default function Register() {
     const router = useRouter()
 
-    const {authenticated} = useAuthState()
+    const { token } = useContext(AuthContext);
 
-    if(authenticated) router.push("/")
+    if(token) router.push("/")
     
     const formik = useFormik({
         initialValues: {

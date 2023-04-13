@@ -1,13 +1,16 @@
-import Axios from "axios"
 import Link from "next/link"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import UniversalInput from "../components/UniversalInput"
-import { useAuthDispatch, useAuthState } from "../context/auth"
 import AuthBackground from "../components/AuthBackground"
 import SubmitButton from "../components/SubmitButton"
 import * as yup from 'yup';
 import { useFormik } from "formik"
+import useAxios from "../hooks/useAxios"
+import { useContext } from "react"
+import { AuthContext } from "../context/auth"
+import { getAccessToken, saveTokens } from "../utils/tokensWorkshop"
+import { LOGIN } from '../constants/backendConstants'
 
 const validationSchema = yup.object({
     username: yup
@@ -23,11 +26,11 @@ const validationSchema = yup.object({
 //!TODO: refactor form
 const Login = () => {
 
-    const dispatch = useAuthDispatch()
-    const {authenticated} = useAuthState()
+    const { post } = useAxios();
+    const { token, setToken } = useContext(AuthContext);
     
     const router = useRouter()
-    if(authenticated) router.push("/")
+    if(token) router.push("/")
 
     const formik = useFormik({
         initialValues: {
@@ -36,12 +39,16 @@ const Login = () => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            const res = await Axios.post('/auth/login',{
+            const res = await post(LOGIN,{
                 username: values.username,
                 password: values.password,
             })
-            dispatch('LOGIN',res.data)
-            if(res.status === 200) router.push("/")
+            console.log("🚀 ~ file: login.tsx:46 ~ onSubmit: ~ res:", res)
+            if(!res.data.error){
+                saveTokens(res.data);
+                setToken(getAccessToken());
+                router.push("/")
+            }
         },
       });
 

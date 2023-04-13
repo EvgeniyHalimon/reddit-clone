@@ -1,5 +1,5 @@
-import { FC, memo, useState } from 'react'
-import { useAuthState } from '../../context/auth'
+import { FC, memo, useContext, useState } from 'react'
+import { AuthContext } from '../../context/auth'
 import { useRouter } from 'next/router'
 import Axios from 'axios'
 import { Post, Comment } from '../../types'
@@ -14,12 +14,12 @@ const VoteSection: FC<IVoteSection> = ({ post, mutate, slug }) => {
 
     const [score, setScore] = useState(post.voteScore)
 
-    const { authenticated } = useAuthState()
+    const { token } = useContext(AuthContext);
 
     const router = useRouter()
 
     const vote = async (value: number, comment?: Comment) => {
-        if(!authenticated) router.push('/login')
+        if(!token) router.push('/login')
         // If vote is the same reset vote
         if (
         (!comment && value === post.userVote) ||

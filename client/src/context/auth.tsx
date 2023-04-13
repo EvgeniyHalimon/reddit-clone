@@ -1,76 +1,45 @@
-import Axios from 'axios'
-import { createContext, useContext, useEffect, useReducer } from 'react'
-import { User } from '../types'
+import { createContext, FC, ReactNode, useState, useMemo, useEffect, memo } from 'react';
+import jwt_decode from "jwt-decode";
+import { User } from '../types';
+import { getAccessToken } from '../utils/tokensWorkshop';
 
-interface State {
-  authenticated: boolean
-  user: User | undefined
-  loading: boolean
+interface IAuthContext{
+  token: string | null,
+  setToken: (value: string | null) => void,
+  user: User | null,
+  setUser: (value: User | null) => void
 }
 
-interface Action {
-  type: string
-  payload: any
-}
-
-const StateContext = createContext<State>({
-  authenticated: false,
+export const AuthContext = createContext<IAuthContext>({
+  token: null,
+  setToken: (user: string | null) => {},
   user: null,
-  loading: true,
-})
+  setUser: (value: User | null) => {}
+});
 
-const DispatchContext = createContext(null)
-
-const reducer = (state: State, { type, payload }: Action) => {
-  switch (type) {
-    case 'LOGIN':
-        console.log('LOGIN');
-      return {
-        ...state,
-        authenticated: true,
-        user: payload,
-      }
-    case 'LOGOUT':
-        console.log('LOGOUT');
-      return { ...state, authenticated: false, user: null }
-    case 'STOP_LOADING':
-        console.log('STOP_LOADING');
-      return { ...state, loading: false }
-    default:
-        console.log('DEFAULT');
-      return state
-  }
+interface IAuthProvider{
+    children: ReactNode
 }
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, defaultDispatch] = useReducer(reducer, {
-    user: null,
-    authenticated: false,
-    loading: true,
-  })
+const AuthProvider: FC<IAuthProvider> = ({ children }) => {
+  const [token, setToken] = useState<string | null>(() => getAccessToken() ? getAccessToken() : null);
+  const [user, setUser] = useState<User | null>(/* () =>  jwt_decode(token) ? jwt_decode(token) :  */null);
+  if(token){
 
-  const dispatch = (type: string, payload?: any) => defaultDispatch({ type, payload })
+    console.log(/* jwt_decode(token),  */'00000')
+  }
+  const authProviderValues = useMemo(() => ({ token: token, setToken: setToken, user: user, setUser: setUser }), [user, token]);
 
   useEffect(() => {
-    async function loadUser() {
-      try {
-        const res = await Axios.get('/auth/me')
-        dispatch('LOGIN', res.data)
-      } catch (err) {
-        console.log(err)
-      } finally {
-        dispatch('STOP_LOADING')
-      }
-    }
-    loadUser()
-  }, [state.authenticated])
+  },[user]);
 
-  return (
-    <DispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={state}>{children}</StateContext.Provider>
-    </DispatchContext.Provider>
-  )
-}
+  return(
+    <AuthContext.Provider
+      value={authProviderValues}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
-export const useAuthState = () => useContext(StateContext)
-export const useAuthDispatch = () => useContext(DispatchContext)
+export default memo(AuthProvider);

@@ -13,6 +13,7 @@ import miscRoutes from './modules/misc/misc.controller'
 import userRoutes from './modules/users/users.controller'
 import trim from './shared/middleware/trim'
 import { ValidationError } from 'express-validation'
+import verifyJWT from './shared/middleware/verifyJWT'
 
 const app = express()
 dotenv.config()
@@ -32,14 +33,7 @@ app.use(
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use((err: ValidationError, req: Request, res: Response, next: NextFunction) => {
-  if (err instanceof ValidationError) {
-    return res.status(err.statusCode).json(err);
-  }
-
-  return res.status(500).json(err);
-});
-
+app.use(verifyJWT);
 app.get('/', (_, res) => res.send('Hello World'))
 app.use('/api/auth', authRoutes)
 app.use('/api/posts', postRoutes)

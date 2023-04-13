@@ -1,32 +1,28 @@
 import Axios from 'axios'
 import Link from 'next/link'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import Image from 'next/image'
 
-import { useAuthState, useAuthDispatch } from '../context/auth'
+import { AuthContext } from '../context/auth'
 
 import Logo from '../../public/images/floppa-logo.jpg'
 import { Sub } from '../types'
 import { useRouter } from 'next/router'
+import { removeTokens } from '../utils/tokensWorkshop'
 
 const Navbar: React.FC = () => {
   const [name, setName] = useState('')
   const [subs, setSubs] = useState<Sub[]>([])
   const [timer, setTimer] = useState(null)
 
-  const { authenticated, loading } = useAuthState()
-  const dispatch = useAuthDispatch()
+  const { token, setToken } = useContext(AuthContext);
 
   const router = useRouter()
 
   const logout = () => {
-    Axios.get('/auth/logout')
-      .then(() => {
-        dispatch('LOGOUT')
-        
-      })
-      .catch((err) => console.log(err))
-  }
+    setToken(null);
+    removeTokens();
+  };
 
   useEffect(() => {
     if (name.trim() === '') {
@@ -108,8 +104,7 @@ const Navbar: React.FC = () => {
       </div>
       {/* Auth buttons */}
       <div className="flex">
-        {!loading &&
-          (authenticated ? (
+          {token ? (
             // Show logout
             <button
               className="hidden w-20 py-1 mr-4 leading-5 sm:block lg:w-32 hollow blue button"
@@ -130,7 +125,7 @@ const Navbar: React.FC = () => {
                 </a>
               </Link>
             </Fragment>
-          ))}
+          )}
       </div>
     </div>
   )

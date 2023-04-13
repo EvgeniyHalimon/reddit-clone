@@ -1,13 +1,13 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { ChangeEvent, createRef, Fragment, useEffect, useState } from 'react'
+import { ChangeEvent, createRef, Fragment, useContext, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import PostCard from '../../components/PostCard/PostCard'
 import Image from 'next/image'
 import classNames from 'classnames'
 
 import { Sub } from '../../types'
-import { useAuthState } from '../../context/auth'
+import { AuthContext } from '../../context/auth'
 import Axios from 'axios'
 import Logo from '../../../public/images/floppa-logo.jpg'
 import Sidebar from '../../components/Sidebar'
@@ -16,7 +16,7 @@ export default function SubPage() {
   // Local state
   const [ownSub, setOwnSub] = useState(false)
   // Global state
-  const { authenticated, user } = useAuthState()
+  const { user } = useContext(AuthContext)
   // Utils
   const router = useRouter()
   const fileInputRef = createRef<HTMLInputElement>()
@@ -29,7 +29,7 @@ export default function SubPage() {
 
   useEffect(() => {
     if (!sub) return
-    setOwnSub(authenticated && user.username === sub.username)
+    setOwnSub(user && user.username === sub.username)
   }, [sub])
 
   const openFileInput = (type: string) => {

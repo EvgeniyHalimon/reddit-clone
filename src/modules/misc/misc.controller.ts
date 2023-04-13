@@ -3,15 +3,17 @@ import { Request, Response, Router } from 'express'
 import auth from '../../shared/middleware/auth'
 import user from '../../shared/middleware/user'
 import miscService from './misc.service'
+import { CustomRequest } from '../../shared/types'
 
-const vote = async (req: Request, res: Response) => {
+
+const vote = async (req: CustomRequest, res: Response) => {
   const { identifier, slug, commentIdentifier, value } = req.body
   const queries = {
     identifier: identifier,
     slug: slug,
     commentIdentifier: commentIdentifier,
     value: value,
-    user: res.locals.user
+    user: req.user
   }
   try {
     const post = await miscService.vote(queries)
