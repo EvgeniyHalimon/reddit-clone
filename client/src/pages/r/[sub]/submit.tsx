@@ -6,6 +6,7 @@ import { FormEvent, useState } from 'react'
 import useSWR from 'swr'
 import Sidebar from '../../../components/Sidebar'
 import { Post, Sub } from '../../../types'
+import { post } from '../../../utils/api'
 
 const Submit = () => {
     const [title, setTitle] = useState('')
@@ -23,13 +24,13 @@ const Submit = () => {
       if (title.trim() === '') return
   
       try {
-        const { data: post } = await Axios.post<Post>('/posts', {
+        const { data: newPost } = await post('/posts', {
           title: title.trim(),
           body,
           sub: sub.name,
         })
   
-        router.push(`/r/${sub.name}/${post.identifier}/${post.slug}`)
+        router.push(`/r/${sub.name}/${newPost.identifier}/${newPost.slug}`)
       } catch (err) {
         console.log(err)
       }

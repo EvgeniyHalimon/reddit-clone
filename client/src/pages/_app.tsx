@@ -9,13 +9,14 @@ import '../styles/Tailwind.css'
 import '../styles/icons.css'
 
 import Navbar from '../components/Navbar'
+import { get } from '../utils/api'
 
 Axios.defaults.baseURL = 'http://localhost:5000/api'
 Axios.defaults.withCredentials = true
 
 const fetcher = async (url: string) => {
   try {
-    const res = await Axios.get(url)
+    const res = await get(url)
     return res.data
   } catch (err) {
     throw err.response.data

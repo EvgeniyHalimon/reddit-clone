@@ -11,6 +11,7 @@ import { useContext } from "react"
 import { AuthContext } from "../context/auth"
 import { getAccessToken, saveTokens } from "../utils/tokensWorkshop"
 import { LOGIN } from '../constants/backendConstants'
+import { post } from "../utils/api"
 
 const validationSchema = yup.object({
     username: yup
@@ -26,7 +27,6 @@ const validationSchema = yup.object({
 //!TODO: refactor form
 const Login = () => {
 
-    const { post } = useAxios();
     const { token, setToken } = useContext(AuthContext);
     
     const router = useRouter()
@@ -43,7 +43,6 @@ const Login = () => {
                 username: values.username,
                 password: values.password,
             })
-            console.log("🚀 ~ file: login.tsx:46 ~ onSubmit: ~ res:", res)
             if(!res.data.error){
                 saveTokens(res.data);
                 setToken(getAccessToken());

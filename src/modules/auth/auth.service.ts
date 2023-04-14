@@ -52,7 +52,6 @@ const authService = {
       throw new CustomError({ message: 'User not found', status: 404 });
     }
     const passwordMatches = await bcrypt.compare(body.password, user.password)
-    console.log("🚀 ~ file: auth.service.ts:52 ~ login: ~ passwordMatches:", passwordMatches)
 
     if (!passwordMatches) {
       throw new CustomError({ message: 'Password is invalid', status: 400 });

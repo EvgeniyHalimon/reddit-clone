@@ -13,6 +13,7 @@ import { AuthContext } from '../../../../context/auth'
 import { FormEvent, useContext, useState } from 'react'
 import VoteSection from '../../../../components/PostCard/VoteSection'
 import CommentSection from '../../../../components/PostCard/CommentSection'
+import { get, post } from '../../../../utils/api'
 
 dayjs.extend(relativeTime)
 
@@ -26,7 +27,7 @@ const PostPage = () => {
   const router = useRouter()
   const { identifier, sub, slug } = router.query
 
-  const { data: post, error } = useSWR<Post>(
+  const { data: post, error } = useSWR(
     identifier && slug ? `/posts/${identifier}/${slug}` : null
   )
 
@@ -46,9 +47,8 @@ const PostPage = () => {
       (comment && comment.userVote === value)
     )
       value = 0
-
     try {
-      await Axios.post('/misc/vote', {
+      await post('/misc/vote', {
         identifier,
         slug,
         commentIdentifier: comment?.identifier,
@@ -65,7 +65,7 @@ const PostPage = () => {
     if (newComment.trim() === '') return
 
     try {
-      await Axios.post(`/posts/${post.identifier}/${post.slug}/comments`, {
+      await post(`/posts/${post.identifier}/${post.slug}/comments`, {
         body: newComment,
       })
 
@@ -114,7 +114,7 @@ const PostPage = () => {
                 <div className="flex">
                   {/* Vote section */}
                     <VoteSection 
-                      post={post} 
+                      currentPost={post} 
                       mutate={mutate}
                       slug={true}
                     />

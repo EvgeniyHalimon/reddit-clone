@@ -25,10 +25,10 @@ const subsService = {
       }
       
       const newSub = new Sub({ 
-          name: queries.name, 
-          description: queries.description, 
-          title: queries.title, 
-          user: queries.user 
+        name: queries.name, 
+        description: queries.description, 
+        title: queries.title, 
+        user: queries.user 
       })
       await newSub.save()
   
@@ -36,7 +36,9 @@ const subsService = {
     },
     get: async (name, user) => {
         const sub = await subsRepository.findSubOfFail(name)
+        if(sub === null || undefined) throw new CustomError({ message: 'Sub not found', status: 404 })
         const posts = await postsRepository.findPostInSub(sub)
+        if(posts === null || undefined) throw new CustomError({ message: 'Posts not found', status: 404 })
     
         sub.posts = posts
     

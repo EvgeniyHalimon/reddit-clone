@@ -11,6 +11,7 @@ import { AuthContext } from '../../context/auth'
 import Axios from 'axios'
 import Logo from '../../../public/images/floppa-logo.jpg'
 import Sidebar from '../../components/Sidebar'
+import { post } from '../../utils/api'
 
 export default function SubPage() {
   // Local state
@@ -46,7 +47,7 @@ export default function SubPage() {
     formData.append('type', fileInputRef.current.name)
 
     try {
-      await Axios.post<Sub>(`/subs/${sub.name}/image`, formData, {
+      await post(`/subs/${sub.name}/image`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       mutate()

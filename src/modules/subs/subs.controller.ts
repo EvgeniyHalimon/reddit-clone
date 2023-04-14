@@ -23,7 +23,7 @@ const createSub = async (req: CustomRequest, res: Response) => {
     return res.json(sub)
   } catch (err) {
     console.log(err)
-    return res.status(500).json({ error: 'Something went wrong' })
+    return res.status(err.status).json({ error: err.message })
   }
 }
 
@@ -33,7 +33,7 @@ const getSub = async (req: CustomRequest, res: Response) => {
     return res.json(sub)
   } catch (err) {
     console.log(err)
-    return res.status(404).json({ sub: 'Sub not found' })
+    return res.status(err.status).json({ error: err.message })
   }
 }
 
@@ -43,7 +43,7 @@ const ownSub = async (req: CustomRequest, res: Response, next: NextFunction) => 
     req.sub = sub
     return next()
   } catch (err) {
-    return res.status(500).json({ error: 'Something went wrong' })
+    return res.status(err.status).json({ error: err.message })
   }
 }
 

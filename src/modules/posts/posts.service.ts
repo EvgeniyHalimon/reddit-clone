@@ -25,7 +25,7 @@ const postsService = {
     },
     getAll: async (queries) => {
         const posts = await postsRepository.getAllPosts(queries.currentPage, queries.postsPerPage)
-        if(posts === null || undefined) throw new CustomError({ message: 'Forbiden', status: 403 })
+        if(posts === null || undefined) throw new CustomError({ message: 'Posts not found', status: 404 })
 
         if (queries.user) {
           posts.forEach((p) => p.setUserVote(queries.user))
@@ -39,7 +39,7 @@ const postsService = {
             relationsArray: ['sub', 'votes', 'comments']
         }
         const post = await postsRepository.getPostOrFail(postQueries)
-      
+        if(post === null || undefined) throw new CustomError({ message: 'Post not found', status: 404 })
         if (queries.user) {
           post.setUserVote(queries.user)
         }
@@ -47,7 +47,7 @@ const postsService = {
     },
     createComment: async (queries) => {
         const post = await postsRepository.findPostOrFail(queries.identifier, queries.slug)
-
+        if(post === null || undefined) throw new CustomError({ message: 'Post not found', status: 404 })
         const comment = new Comment({
           body: queries.body,
           user: queries.user,
@@ -60,7 +60,7 @@ const postsService = {
     },
     getComments: async (identifier, slug, user) => {
         const post = await postsRepository.findPostOrFail(identifier, slug)
-
+        if(post === null || undefined) throw new CustomError({ message: 'Post not found', status: 404 })
         const comments = await commentRepository.getCommentsForPost(post)
     
         if(user) {

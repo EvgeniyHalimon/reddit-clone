@@ -20,7 +20,7 @@ const vote = async (req: CustomRequest, res: Response) => {
     return res.json(post)
   } catch (err) {
     console.log(err)
-    return res.status(500).json({ error: 'Something went wrong' })
+    return res.status(err.status).json({ error: err.message })
   }
 }
 
@@ -29,7 +29,7 @@ const topSubs = async (_: Request, res: Response) => {
     const subs = await miscService.topSubs()
     return res.json(subs)
   } catch (err) {
-    return res.status(500).json({ error: 'Something went wrong' })
+    return res.status(err.status).json({ error: err.message })
   }
 }
 

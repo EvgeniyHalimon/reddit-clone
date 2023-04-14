@@ -26,7 +26,7 @@ const AuthProvider: FC<IAuthProvider> = ({ children }) => {
   const [user, setUser] = useState<User | null>(/* () =>  jwt_decode(token) ? jwt_decode(token) :  */null);
   if(token){
 
-    console.log(/* jwt_decode(token),  */'00000')
+    console.log(jwt_decode(token), '00000')
   }
   const authProviderValues = useMemo(() => ({ token: token, setToken: setToken, user: user, setUser: setUser }), [user, token]);
 

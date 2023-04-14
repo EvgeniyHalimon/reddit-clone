@@ -12,7 +12,7 @@ const getUserSubmissions = async (req: Request, res: Response) => {
     return res.json(submissions)
   } catch (err) {
     console.log(err)
-    return res.status(500).json({ error: 'Something went wrong' })
+    return res.status(err.status).json({ error: err.message })
   }
 }
 

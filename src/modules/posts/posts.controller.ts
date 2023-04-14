@@ -19,7 +19,7 @@ const createPost = async (req: CustomRequest, res: Response) => {
     return res.json(post)
   } catch (err) {
     console.log(err)
-    return res.status(500).json({ error: 'Something went wrong' })
+    return res.status(err.status).json({ error: err.message })
   }
 }
 
@@ -36,7 +36,7 @@ const getPosts = async (req: CustomRequest, res: Response) => {
     return res.json(posts)
   } catch (err) {
     console.log(err)
-    return res.status(500).json({ error: 'Something went wrong' })
+    return res.status(err.status).json({ error: err.message })
   }
 }
 
@@ -52,7 +52,7 @@ const getPost = async (req: CustomRequest, res: Response) => {
     return res.json(post)
   } catch (err) {
     console.log(err)
-    return res.status(404).json({ error: 'Post not found' })
+    return res.status(err.status).json({ error: err.message })
   }
 }
 
@@ -69,7 +69,7 @@ const commentOnPost = async (req: CustomRequest, res: Response) => {
     return res.json(comment)
   } catch (err) {
     console.log(err)
-    return res.status(404).json({ error: 'Post not found' })
+    return res.status(err.status).json({ error: err.message })
   }
 }
 
@@ -80,7 +80,7 @@ const getPostComments = async (req: CustomRequest, res: Response) => {
     return res.json(comments)
   } catch (err) {
     console.log(err)
-    return res.status(500).json({ error: 'Something went wrong' })
+    return res.status(err.status).json({ error: err.message })
   }
 }
 

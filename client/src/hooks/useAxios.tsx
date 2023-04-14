@@ -30,7 +30,7 @@ const useAxios = () => {
     return axiosInstance.delete(`${url}`, data);
   };
 
-  /* axiosInstance.interceptors.response.use(
+  axiosInstance.interceptors.response.use(
     (res) => {
       return res;
     },
@@ -57,7 +57,7 @@ const useAxios = () => {
       }
       return err.response.data;
     },
-  ); */
+  );
     
   return { get, post, put, deleteData };
 };

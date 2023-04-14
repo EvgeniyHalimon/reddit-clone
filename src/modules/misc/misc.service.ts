@@ -18,16 +18,19 @@ const miscService = {
     vote: async (queries) => {
         // Validate vote value
         if (![-1, 0, 1].includes(queries.value)){
-            throw new CustomError({message: 'Value must be -1, 0 or 1', status: 400})
+          throw new CustomError({message: 'Value must be -1, 0 or 1', status: 400})
         }
         let post = await postsRepository.findPostOrFail(queries.identifier, queries.slug)
+        if(post === undefined) throw new CustomError({message: `Post not found`, status: 404})
         let vote: Vote | undefined
         let comment: Comment | undefined
 
         if (queries.commentIdentifier) {
           // IF there is a comment identifier find vote by comment
           comment = await commentRepository.getCommentOrFail(queries.commentIdentifier)
+          if(comment === undefined) throw new CustomError({message: `Comment not found`, status: 404})
           vote = await voteRepository.findVoteByComment(queries.user, comment)
+          if(vote === undefined) throw new CustomError({message: `Vote not found`, status: 404})
         } else {
           // Else find vote by post
           vote = await voteRepository.findVoteByPost(queries.user, post)
@@ -85,6 +88,7 @@ const miscService = {
         .orderBy(`"postCount"`, 'DESC')
         .limit(LIMIT_OF_TOP_SUBS)
         .execute()
+      if(subs === undefined) throw new CustomError({message: `Subs doesn't exist`, status: 400})
       return subs
     },
 }

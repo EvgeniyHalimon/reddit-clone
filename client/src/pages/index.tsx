@@ -11,6 +11,10 @@ import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AuthContext } from '../context/auth';
+import { getAccessToken, getRefreshToken } from '../utils/tokensWorkshop';
+import axios from 'axios';
+import { BASE_URL } from '../constants/backendConstants';
+import { get } from '../utils/api';
 
 dayjs.extend(relativeTime)
 
@@ -20,10 +24,10 @@ const metaTitle = 'Floppedit: the front page of the internet'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const posts = await Axios.get<Post[]>('/posts')
     
+    const posts = await get('/posts')
     //!TODO find solution
-    const topSubs = await Axios.get<Sub[]>('/misc/top-subs')
+    const topSubs = await get('/misc/top-subs')
     return { props: { posts: posts.data, topSubs: topSubs.data } }
   } catch (err) {
     return { props: { error: 'Something went wrong' } }

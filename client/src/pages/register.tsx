@@ -9,6 +9,8 @@ import AuthBackground from '../components/AuthBackground'
 import SubmitButton from '../components/SubmitButton'
 import * as yup from 'yup'
 import { Field, useFormik, ErrorMessage} from 'formik'
+import { post } from '../utils/api'
+import { REGISTER } from '../constants/backendConstants'
 
 
 const validationSchema = yup.object({
@@ -48,7 +50,7 @@ export default function Register() {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            const res = await Axios.post('/auth/register',{
+            const res = await post(REGISTER,{
                 username: values.username,
                 password: values.password,
                 email: values.email,

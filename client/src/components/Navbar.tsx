@@ -9,6 +9,7 @@ import Logo from '../../public/images/floppa-logo.jpg'
 import { Sub } from '../types'
 import { useRouter } from 'next/router'
 import { removeTokens } from '../utils/tokensWorkshop'
+import { get } from '../utils/api'
 
 const Navbar: React.FC = () => {
   const [name, setName] = useState('')
@@ -37,7 +38,7 @@ const Navbar: React.FC = () => {
     setTimer(
       setTimeout(async () => {
         try {
-          const { data } = await Axios.get(`/subs/search/${name}`)
+          const { data } = await get(`/subs/search/${name}`)
           setSubs(data)
           console.log(data)
         } catch (err) {

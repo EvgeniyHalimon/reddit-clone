@@ -5,6 +5,7 @@ import { FormEvent, useState } from 'react'
 import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import ErrorMessage from '../../components/ErrorMessage'
+import { post } from '../../utils/api'
 
 const Create = () => {
   const [name, setName] = useState('')
@@ -19,7 +20,7 @@ const Create = () => {
     event.preventDefault()
 
     try {
-      const res = await Axios.post('/subs', { name, title, description })
+      const res = await post('/subs', { name, title, description })
 
       router.push(`/r/${res.data.name}`)
     } catch (err) {
