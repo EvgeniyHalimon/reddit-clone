@@ -47,7 +47,6 @@ const authService = {
   },
   login: async (body: IAuthLogin): Promise<ITokens | undefined>  => {
     const user = await userRepository.findUsername(body.username)
-    console.log("🚀 ~ file: auth.service.ts:50 ~ login: ~ user:", user)
     if (user === undefined) {
       throw new CustomError({ message: 'User not found', status: 404 });
     }

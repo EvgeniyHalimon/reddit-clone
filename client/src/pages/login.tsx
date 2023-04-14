@@ -6,7 +6,6 @@ import AuthBackground from "../components/AuthBackground"
 import SubmitButton from "../components/SubmitButton"
 import * as yup from 'yup';
 import { useFormik } from "formik"
-import useAxios from "../hooks/useAxios"
 import { useContext } from "react"
 import { AuthContext } from "../context/auth"
 import { getAccessToken, saveTokens } from "../utils/tokensWorkshop"
@@ -22,7 +21,7 @@ const validationSchema = yup.object({
       .string()
       .trim()
       .required('You forgot to enter your password'),
-  });
+});
 
 //!TODO: refactor form
 const Login = () => {

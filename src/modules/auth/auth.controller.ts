@@ -20,8 +20,6 @@ const register = async (req: Request, res: Response) => {
 const login = async (req: Request, res: Response) => {
   try {
     const token: ITokens = await authService.login(req.body)
-    console.log("🚀 ~ file: auth.controller.ts:28 ~ login ~ token:", token)
-  
     res.json({ refreshToken : token.refreshToken, accessToken: token.accessToken });
   } catch (err) {
     console.log(err)

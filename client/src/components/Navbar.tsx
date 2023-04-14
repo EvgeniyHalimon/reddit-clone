@@ -40,7 +40,6 @@ const Navbar: React.FC = () => {
         try {
           const { data } = await get(`/subs/search/${name}`)
           setSubs(data)
-          console.log(data)
         } catch (err) {
           console.log(err)
         }
