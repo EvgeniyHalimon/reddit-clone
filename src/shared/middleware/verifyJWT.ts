@@ -13,6 +13,7 @@ const ACCESS_KEY: Secret = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_KEY: Secret = process.env.REFRESH_TOKEN_SECRET;
 
 const verifyJWT = (req: CustomRequest, res: Response, next: NextFunction): void => {
+  console.log("🚀 ~ file: verifyJWT.ts:16 ~ verifyJWT ~ req:", req.url)
   if(req.url == '/api/auth/register' || req.url == '/api/auth/login'){
     return next();
   }

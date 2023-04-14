@@ -1,6 +1,5 @@
-import Axios from 'axios';
 import Head from 'next/head'
-import { Post, Sub } from '../types';
+import { Post } from '../types';
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import PostCard from '../components/PostCard/PostCard';
@@ -11,10 +10,9 @@ import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AuthContext } from '../context/auth';
-import { getAccessToken, getRefreshToken } from '../utils/tokensWorkshop';
-import axios from 'axios';
-import { BASE_URL } from '../constants/backendConstants';
-import { get } from '../utils/api';
+import { axiosInstance, get } from '../utils/api';
+import { SSR_TOP_SUBS } from '../constants/backendConstants';
+import { getAccessToken } from '../utils/tokensWorkshop';
 
 dayjs.extend(relativeTime)
 
@@ -23,20 +21,25 @@ const metaTitle = 'Floppedit: the front page of the internet'
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  context.req.headers.authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImNyZWF0ZWRBdCI6IjIwMjMtMDQtMDNUMTg6MDI6MTEuMTc5WiIsInVwZGF0ZWRBdCI6IjIwMjMtMDQtMDNUMTg6MDI6MTEuMTc5WiIsImVtYWlsIjoic0BtYWlsLmNvbSIsInVzZXJuYW1lIjoiZWxmIn0sImlhdCI6MTY4MTQ5MjAyMywiZXhwIjoxNjgxNDk1NjIzfQ.K6dQ5wso2xzwUwr67RkC-Azp1Wsg0YNGkRrRU6sJ9WU`
+  console.log("🚀 ~ file: index.tsx:24 ~ constgetServerSideProps:GetServerSideProps= ~ context:", context.req.headers.authorization)
+  console.log('object');
   try {
-    
-    const posts = await get('/posts')
     //!TODO find solution
-    const topSubs = await get('/misc/top-subs')
-    return { props: { posts: posts.data, topSubs: topSubs.data } }
+    const topSubs:any = await fetch(SSR_TOP_SUBS, {headers: {Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImNyZWF0ZWRBdCI6IjIwMjMtMDQtMDNUMTg6MDI6MTEuMTc5WiIsInVwZGF0ZWRBdCI6IjIwMjMtMDQtMDNUMTg6MDI6MTEuMTc5WiIsImVtYWlsIjoic0BtYWlsLmNvbSIsInVzZXJuYW1lIjoiZWxmIn0sImlhdCI6MTY4MTQ5MjAyMywiZXhwIjoxNjgxNDk1NjIzfQ.K6dQ5wso2xzwUwr67RkC-Azp1Wsg0YNGkRrRU6sJ9WU`}})
+    const data:any = await topSubs.json()
+    console.log("🚀 ~ file: index.tsx:31 ~ constgetServerSideProps:GetServerSideProps= ~ topSubs:", data)
+    return { props: { dag : data, test: 'm kfm kmfk mfkm kfmk mfk mkfm ' } }
   } catch (err) {
+    console.log("🚀 ~ file: index.tsx:37 ~ constgetServerSideProps:GetServerSideProps= ~ err:", err)
     return { props: { error: 'Something went wrong' } }
   }
 }
 
-export default function Home({ topSubs }) {
+export default function Home({dag}) {
+  console.log("🚀 ~ file: index.tsx:36 ~ Home ~ dag:", dag)
   const [observerdPost, setObservedPost] = useState('')
-  /* const { data: posts } = useSWR<Post[]>(`/posts?page=0`) */
+  const { data: topSubs } = useSWR('misc/top-subs')
   const { token } = useContext(AuthContext);
   const { data, error, mutate, size: page, setSize: setPage } = useSWRInfinite((index) => `/posts?page=${index}`)
 
@@ -57,12 +60,13 @@ export default function Home({ topSubs }) {
 
   useEffect(() => {
     if(!posts || posts.length === 0) return
-
     const id = posts[posts.length - 1].identifier
     if(id !== observerdPost){
       setObservedPost(id)
       observeElement(document.getElementById(id))
     }
+    
+    console.log(getAccessToken())
   }, [posts])
   
   return (
@@ -92,7 +96,7 @@ export default function Home({ topSubs }) {
               </p>
             </div>
             <div>
-              {topSubs?.map((sub) => (
+              {topSubs?.map((sub: any) => (
                 <div
                   key={sub.name}
                   className="flex items-center px-4 py-2 text-xs border-b"
@@ -132,5 +136,7 @@ export default function Home({ topSubs }) {
     </Fragment>
   )
 }
+
+
 
 

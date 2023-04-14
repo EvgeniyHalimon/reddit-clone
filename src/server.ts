@@ -12,7 +12,6 @@ import subRoutes from './modules/subs/subs.controller'
 import miscRoutes from './modules/misc/misc.controller'
 import userRoutes from './modules/users/users.controller'
 import trim from './shared/middleware/trim'
-import { ValidationError } from 'express-validation'
 import verifyJWT from './shared/middleware/verifyJWT'
 
 const app = express()
@@ -25,7 +24,6 @@ app.use(trim)
 app.use(cookieParser())
 app.use(
   cors({
-    credentials: true,
     origin: process.env.ORIGIN,
     optionsSuccessStatus: 200,
   })

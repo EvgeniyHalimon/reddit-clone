@@ -2,9 +2,6 @@ import Link from "next/link"
 import { Post } from "../../types";
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import ActionButton from '../ActionButton';
-import Axios  from 'axios';
-import { useAuthState } from "../../context/auth";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import VoteSection from "./VoteSection";
@@ -30,7 +27,7 @@ const PostCard: React.FC<IPostCard> = ({ post, mutate }) => {
             id={post.identifier}
         >
             <VoteSection 
-                post={post} 
+                currentPost={post} 
                 mutate={mutate}
             />
             <div className="w-full p-2">

@@ -92,8 +92,8 @@ const searchSubs = async (req: Request, res: Response) => {
 
 const router = Router()
 
-router.post('/', user, auth, createSub)
-router.get('/:name', user, getSub)
+router.post('/', createSub)
+router.get('/:name', getSub)
 router.get('/search/:name', searchSubs)
 router.post(
   '/:name/image',

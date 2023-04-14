@@ -4,7 +4,7 @@ import { BASE_URL, REFRESH } from "../constants/backendConstants";
 
 const accessToken = getAccessToken();
 const refreshToken = getRefreshToken();
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export const deleteData = (url: string, data?: any): Promise<any> => {
   return axiosInstance.delete(`${url}`, data);
 };
 
-axiosInstance.interceptors.response.use(
+/* axiosInstance.interceptors.response.use(
   (res) => {
     return res;
   },
@@ -55,4 +55,4 @@ axiosInstance.interceptors.response.use(
     }
     return err.response.data;
   },
-);
+); */

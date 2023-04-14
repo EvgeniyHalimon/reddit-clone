@@ -15,6 +15,6 @@ const getUserSubmissions = async (req: Request, res: Response) => {
 
 const router = Router()
 
-router.get('/:username', user, getUserSubmissions)
+router.get('/:username', getUserSubmissions)
 
 export default router
