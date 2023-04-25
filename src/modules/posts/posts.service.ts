@@ -22,6 +22,8 @@ const postsService = {
             sub: subRecord 
         })
         await post.save()
+
+        return post
     },
     getAll: async (queries) => {
         const posts = await postsRepository.getAllPosts(queries.currentPage, queries.postsPerPage)

@@ -8,6 +8,7 @@ import { CustomRequest } from '../../shared/types'
 
 const createPost = async (req: CustomRequest, res: Response) => {
   const { title, body, sub } = req.body
+  console.log("🚀 ~ file: posts.controller.ts:11 ~ createPost ~ title, body, sub:", title, body, sub)
   const queries = {
     title: title,
     body: body,
