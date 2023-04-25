@@ -24,6 +24,7 @@ const createPost = async (req: CustomRequest, res: Response) => {
 }
 
 const getPosts = async (req: CustomRequest, res: Response) => {
+  console.log("🚀 ~ file: posts.controller.ts:27 ~ getPosts ~ req:", req.user)
   const currentPage: number = (req.query.page || 0)  as number
   const postsPerPage: number = (req.query.count || 8) as number
   const queries = {

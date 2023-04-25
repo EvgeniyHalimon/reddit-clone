@@ -15,7 +15,6 @@ interface IPostCard{
 }
 
 const PostCard: React.FC<IPostCard> = ({ post, mutate }) => {
-
     const router = useRouter()
 
     const isInSubPage = router.pathname === '/r/[sub]'

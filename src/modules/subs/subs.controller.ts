@@ -97,8 +97,6 @@ router.get('/:name', getSub)
 router.get('/search/:name', searchSubs)
 router.post(
   '/:name/image',
-  user,
-  auth,
   ownSub,
   upload.single('file'),
   uploadSubImage

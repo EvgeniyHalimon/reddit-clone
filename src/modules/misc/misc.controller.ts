@@ -34,7 +34,7 @@ const topSubs = async (_: Request, res: Response) => {
 }
 
 const router = Router()
-router.post('/vote', user, auth, vote)
+router.post('/vote', vote)
 router.get('/top-subs', topSubs)
 
 export default router
