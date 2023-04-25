@@ -13,7 +13,7 @@ import { AuthContext } from '../../../../context/auth'
 import { FormEvent, useContext, useState } from 'react'
 import VoteSection from '../../../../components/PostCard/VoteSection'
 import CommentSection from '../../../../components/PostCard/CommentSection'
-import { get, post } from '../../../../utils/api'
+import { get, post as postFn } from '../../../../utils/api'
 
 dayjs.extend(relativeTime)
 
@@ -48,7 +48,7 @@ const PostPage = () => {
     )
       value = 0
     try {
-      await post('/misc/vote', {
+      await postFn('/misc/vote', {
         identifier,
         slug,
         commentIdentifier: comment?.identifier,
@@ -65,7 +65,7 @@ const PostPage = () => {
     if (newComment.trim() === '') return
 
     try {
-      await post(`/posts/${post.identifier}/${post.slug}/comments`, {
+      await postFn(`/posts/${post.identifier}/${post.slug}/comments`, {
         body: newComment,
       })
 
@@ -81,7 +81,7 @@ const PostPage = () => {
     <>
       <Head>
         <title>{post?.title}</title>
-        <meta property='og:title' content={post?.title}/>
+        <meta property='og:title' content={post?.title}/> frr
         <meta name="og:description" content={post?.body} />
         <meta property='twitter:title' content={post?.title}/>
         <meta name="twitter:description" content={post?.body} />

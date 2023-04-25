@@ -6,20 +6,16 @@ import PostCard from '../components/PostCard/PostCard';
 import useSWR from 'swr'
 import useSWRInfinite from 'swr/infinite'
 import { Fragment, useContext, useEffect, useState } from 'react';
-import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AuthContext } from '../context/auth';
-import { axiosInstance, get } from '../utils/api';
-import { SSR_TOP_SUBS } from '../constants/backendConstants';
-import { getAccessToken } from '../utils/tokensWorkshop';
 
 dayjs.extend(relativeTime)
 
 const metaDescription = '/b'
 const metaTitle = 'Floppedit: the front page of the internet'
 
-
+/* 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   context.req.headers.authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImNyZWF0ZWRBdCI6IjIwMjMtMDQtMDNUMTg6MDI6MTEuMTc5WiIsInVwZGF0ZWRBdCI6IjIwMjMtMDQtMDNUMTg6MDI6MTEuMTc5WiIsImVtYWlsIjoic0BtYWlsLmNvbSIsInVzZXJuYW1lIjoiZWxmIn0sImlhdCI6MTY4MTQ5MjAyMywiZXhwIjoxNjgxNDk1NjIzfQ.K6dQ5wso2xzwUwr67RkC-Azp1Wsg0YNGkRrRU6sJ9WU`
   console.log("🚀 ~ file: index.tsx:24 ~ constgetServerSideProps:GetServerSideProps= ~ context:", context.req.headers.authorization)
@@ -34,10 +30,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     console.log("🚀 ~ file: index.tsx:37 ~ constgetServerSideProps:GetServerSideProps= ~ err:", err)
     return { props: { error: 'Something went wrong' } }
   }
-}
+} */
 
-export default function Home({dag}) {
-  console.log("🚀 ~ file: index.tsx:36 ~ Home ~ dag:", dag)
+export default function Home() {
   const [observerdPost, setObservedPost] = useState('')
   const { data: topSubs } = useSWR('misc/top-subs')
   const { token } = useContext(AuthContext);
@@ -66,7 +61,6 @@ export default function Home({dag}) {
       observeElement(document.getElementById(id))
     }
     
-    console.log(getAccessToken())
   }, [posts])
   
   return (

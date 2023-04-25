@@ -17,12 +17,12 @@ export const removeTokens = () => {
 
 export const getRefreshToken = () => {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('floppedit_refreshToken') ?? 'token';
+    return localStorage.getItem('floppedit_refreshToken') ?? '';
   }
 };
 
 export const getAccessToken = () => {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('floppedit_accessToken') ?? 'token';
+    return localStorage.getItem('floppedit_accessToken') ?? '';
   }
 };

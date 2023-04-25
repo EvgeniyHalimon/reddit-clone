@@ -28,7 +28,7 @@ export const deleteData = (url: string, data?: any): Promise<any> => {
   return axiosInstance.delete(`${url}`, data);
 };
 
-/* axiosInstance.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (res) => {
     return res;
   },
@@ -55,4 +55,4 @@ export const deleteData = (url: string, data?: any): Promise<any> => {
     }
     return err.response.data;
   },
-); */
+);

@@ -22,22 +22,20 @@ interface IAuthProvider{
 }
 
 const AuthProvider: FC<IAuthProvider> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(() => getAccessToken() ? getAccessToken() : null);
-  const [user, setUser] = useState<User | null>(/* () =>  jwt_decode(token) ? jwt_decode(token) :  */null);
-
+  const [token, setToken] = useState<string | null>(() => getAccessToken() ? getAccessToken() : '');
+  const [user, setUser] = useState<User | null>(() =>  parseJwt(token)?.user);
+  
   function parseJwt(token) {
-    if(token !== 'token' && token !== null){
+    if(token !== '' && token !== null){
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace('-', '+').replace('_', '/');
       return JSON.parse(window.atob(base64));
     }
   }
-
-  console.log(parseJwt(token).user, 'fkvkfvjnfjvnjfnvjnfjvnjfnvjfnvjnfjvnjfnvjnfj')
+  
   const authProviderValues = useMemo(() => ({ token: token, setToken: setToken, user: user, setUser: setUser }), [user, token]);
-
+  
   useEffect(() => {
-    setUser(parseJwt(token).user)
   },[user, token]);
 
   return(
