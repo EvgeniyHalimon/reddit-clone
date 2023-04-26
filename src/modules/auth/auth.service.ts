@@ -13,18 +13,16 @@ const ACCESS_KEY: Secret = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_KEY: Secret = process.env.REFRESH_TOKEN_SECRET;
 
 const generateTokens = (foundUser: any): ITokens => {
-  console.log("🚀 ~ file: auth.service.ts:16 ~ generateTokens ~ foundUser:", foundUser)
   const accessToken = jwt.sign(
     {
-      user: foundUser,
+      user: {...foundUser, id: foundUser.id, password: foundUser.password},
     },
     ACCESS_KEY,
     { expiresIn: '1h' },
   );
-  console.log("🚀 ~ file: auth.service.ts:23 ~ generateTokens ~ accessToken:", accessToken)
   const refreshToken = jwt.sign(
     {
-      user: foundUser,
+      user: {...foundUser, id: foundUser.id, password: foundUser.password},
     },
     REFRESH_KEY,
     { expiresIn: '1d' },

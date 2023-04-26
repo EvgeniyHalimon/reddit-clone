@@ -27,28 +27,34 @@ const miscService = {
 
         if (queries.commentIdentifier) {
           // IF there is a comment identifier find vote by comment
+          console.log('########## first 30 #########') /* -1 */
           comment = await commentRepository.getCommentOrFail(queries.commentIdentifier)
           if(comment === undefined) throw new CustomError({message: `Comment not found`, status: 404})
           vote = await voteRepository.findVoteByComment(queries.user, comment)
-          if(vote === undefined) throw new CustomError({message: `Vote not found`, status: 404})
+          /* if(vote === undefined) throw new CustomError({message: `Vote not found`, status: 404}) */
         } else {
           // Else find vote by post
+          console.log('########## first 36 #########')
           vote = await voteRepository.findVoteByPost(queries.user, post)
         }
 
         if (!vote && queries.value === 0) {
+          console.log('########## first 40 #########')
           // if no vote and value = 0 return error
           throw new CustomError({message: 'Vote not found', status: 404})
         } else if (!vote) {
+          console.log('########## first 44 #########')
           // If no vote create it
           vote = new Vote({ user: queries.user, value: queries.value })
           if (comment) vote.comment = comment
           else vote.post = post
           await vote.save()
         } else if (queries.value === 0) {
+          console.log('########## first 51 #########')
           // If vote exists and value = 0 remove vote from DB
           await vote.remove()
         } else if (vote.value !== queries.value) {
+          console.log('first 55')
           // If vote and value has changed, update vote
           vote.value = queries.value
           await vote.save()

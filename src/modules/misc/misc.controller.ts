@@ -1,7 +1,5 @@
 import { Request, Response, Router } from 'express'
 
-import auth from '../../shared/middleware/auth'
-import user from '../../shared/middleware/user'
 import miscService from './misc.service'
 import { CustomRequest } from '../../shared/types'
 

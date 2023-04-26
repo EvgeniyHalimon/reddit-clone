@@ -1,5 +1,5 @@
 import { createConnection } from 'typeorm'
-import express, { Request, Response, NextFunction} from 'express'
+import express from 'express'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'

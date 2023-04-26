@@ -1,6 +1,5 @@
 import { Request, Response, Router } from 'express'
 
-import user from '../../shared/middleware/user'
 import usersService from './users.service'
 
 const getUserSubmissions = async (req: Request, res: Response) => {

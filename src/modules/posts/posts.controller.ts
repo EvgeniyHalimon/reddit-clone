@@ -1,14 +1,11 @@
-import { Router, Request, Response } from 'express'
+import { Router, Response } from 'express'
 
-import auth from '../../shared/middleware/auth'
-import user from '../../shared/middleware/user'
 import postsService from './posts.service'
 import { CustomRequest } from '../../shared/types'
 
 
 const createPost = async (req: CustomRequest, res: Response) => {
   const { title, body, sub } = req.body
-  console.log("🚀 ~ file: posts.controller.ts:11 ~ createPost ~ title, body, sub:", title, body, sub)
   const queries = {
     title: title,
     body: body,
@@ -25,7 +22,6 @@ const createPost = async (req: CustomRequest, res: Response) => {
 }
 
 const getPosts = async (req: CustomRequest, res: Response) => {
-  console.log("🚀 ~ file: posts.controller.ts:27 ~ getPosts ~ req:", req.user)
   const currentPage: number = (req.query.page || 0)  as number
   const postsPerPage: number = (req.query.count || 8) as number
   const queries = {

@@ -2,8 +2,6 @@ import { NextFunction, Request, Response, Router } from 'express'
 import multer, { FileFilterCallback } from 'multer'
 import path from 'path'
 
-import auth from '../../shared/middleware/auth'
-import user from '../../shared/middleware/user'
 import { makeId } from '../../shared/utils/helpers'
 import subsService from './subs.service'
 import { CustomRequest } from '../../shared/types'

@@ -6,7 +6,6 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
-  AfterLoad,
 } from 'typeorm'
 import { Exclude, Expose } from 'class-transformer'
 
@@ -69,7 +68,10 @@ export default class Post extends Entity {
   }
 
   @Expose() get voteScore(): number {
-    return this.votes?.reduce((prev, curr) => prev + (Number(curr.value) == -1 ? 0 : Number(curr.value)), 0)
+    /* const positive = this.votes.filter(item => Number(item.value) > 0)
+    const negative = this.votes.filter(item => Number(item.value) < 0)
+    return positive.length - negative.length */
+    return this.votes?.reduce((prev, curr) => Number(prev) + Number(curr.value), 0)
   }
 
   protected userVote: number

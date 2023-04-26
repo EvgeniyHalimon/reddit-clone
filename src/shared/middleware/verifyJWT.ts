@@ -13,9 +13,7 @@ const ACCESS_KEY: Secret = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_KEY: Secret = process.env.REFRESH_TOKEN_SECRET;
 
 const verifyJWT = (req: CustomRequest, res: Response, next: NextFunction): void => {
-  /* const rou = req.user ? 'test' : req.url.match(/page=[0-9]/i)
-  console.log("🚀 ~ file: verifyJWT.ts:18 ~ verifyJWT ~ rou:", new Date().toISOString(), rou) */
-  if(req.url == '/api/auth/register' || req.url == '/api/auth/login' || req.url == '/api/misc/top-subs'){
+  if(req.url == '/api/auth/register' || req.url == '/api/auth/login'){
     return next();
   }
   const authHeader = req.headers['authorization'];
